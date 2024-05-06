@@ -12,6 +12,16 @@ def __remove_copyright(text: str) -> str:
   pattern = re.compile(r'^#.*\n', re.MULTILINE)
   return pattern.sub('', text)
 
+def __parse_line(line: str) -> DictionaryEntry:
+  traditional, simplified, pinyin, definitions = re.match(
+      r'(.*) (.*) (\[.*\]) \/(.*)\/', line).groups()  # type: ignore
+
+  definitions = definitions.split('/')
+
+  entry = DictionaryEntry(traditional, simplified, pinyin, definitions)
+
+  return entry
+
 
 def parse(file_name: str):
   """Parses the given dictionary file into an application friendly format"""
