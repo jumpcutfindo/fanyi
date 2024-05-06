@@ -1,0 +1,6 @@
+{
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "autopep8.args": ["--indent-size=2"],
+  "pylint.args": ["--indent-size=2"]
+}
