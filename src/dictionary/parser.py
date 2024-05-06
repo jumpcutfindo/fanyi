@@ -9,7 +9,7 @@ def __read_file(file_name: str) -> str:
 
 def __remove_copyright(text: str) -> str:
   """Removes the chunk of copyright text present at the top of the dict file"""
-  pattern = re.compile('^#.*\n', re.MULTILINE)
+  pattern = re.compile(r'^#.*\n', re.MULTILINE)
   return pattern.sub('', text)
 
 
