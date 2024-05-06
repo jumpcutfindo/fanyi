@@ -27,7 +27,7 @@ def __parse_line(line: str) -> DictionaryEntry:
   return entry
 
 
-def parse(file_name: str):
+def parse(file_name: str) -> Dictionary:
   """Parses the given dictionary file into an application friendly format"""
   print('Parsing Mandarin dictionary data...')
   raw_text = __read_file(file_name)
@@ -42,3 +42,5 @@ def parse(file_name: str):
   dictionary = Dictionary(entries)
 
   print('Dictionary parsed with {} entries'.format(dictionary.length()))
+
+  return dictionary
