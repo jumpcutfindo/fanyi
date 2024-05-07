@@ -4,10 +4,12 @@ import re
 
 
 class Controller:
-  def __init__(self):
+  def __init__(self, dictionary):
     self.input_listener = InputListener()
     self.hotkeys = []
     self.__register_hotkeys()
+
+    self.dictionary = dictionary
 
   def start(self):
     print("Starting controller...")
