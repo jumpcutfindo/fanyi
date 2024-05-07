@@ -26,11 +26,11 @@ class Controller:
     print("Registering hotkeys...")
     # TODO: Figure out how to make this customisable
     self.__register_hotkey(
-        'request_partial_capture', '<ctrl>+<alt>+e', lambda: self.on_partial_capture())
+        'request_partial_capture', '<ctrl>+<alt>+g', lambda: self.on_partial_capture())
     self.__register_hotkey(
         'request_full_capture', '<ctrl>+<alt>+h', lambda: self.on_full_capture())
     self.__register_hotkey(
-        'exit', '<ctrl>+<alt>+j', lambda: self.on_exit_app())
+        'exit', '<ctrl>+<alt>+e', lambda: self.on_exit_app())
     self.__register_hotkey(
         'show_monitor_info', '<ctrl>+<alt>+m', lambda: self.on_show_monitor_info())
 
