@@ -26,11 +26,14 @@ class Controller:
     print("Registering hotkeys...")
     # TODO: Figure out how to make this customisable
     self.__register_hotkey(
-        'request_partial_capture', '<ctrl>+<alt>+g', lambda: self.on_partial_capture())
+        'request_partial_capture', '<ctrl>+<alt>+e', lambda: self.on_partial_capture())
     self.__register_hotkey(
         'request_full_capture', '<ctrl>+<alt>+h', lambda: self.on_full_capture())
     self.__register_hotkey(
         'exit', '<ctrl>+<alt>+j', lambda: self.on_exit_app())
+    self.__register_hotkey(
+        'show_monitor_info', '<ctrl>+<alt>+m', lambda: self.on_show_monitor_info())
+
     print("Registered {} hotkeys".format(len(self.hotkeys)))
 
   def on_full_capture(self):
@@ -117,6 +120,9 @@ class Controller:
       phrases_map[phrase] = subphrases
 
     return phrases_map
+
+  def on_show_monitor_info(self):
+    print('Showing monitor info: {}'.format(screenshot.get_monitors()))
 
   def on_exit_app(self):
     print('Exiting application...')
