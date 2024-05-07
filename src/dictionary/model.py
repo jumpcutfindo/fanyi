@@ -21,8 +21,12 @@ class Dictionary:
 
   def find_simplified(self, simplified: str):
     """Searches for a word by its Simplified Chinese representation"""
-    return self.__simplified_map[simplified]
-  
+    if simplified in self.__simplified_map:
+      return self.__simplified_map[simplified]
+    return None
+
   def find_traditional(self, traditional: str):
     """Searches for a word by its Traditional Chinese representation"""
-    return self.__traditional_map[traditional]
+    if traditional in self.__traditional_map:
+      return self.__traditional_map[traditional]
+    return None
