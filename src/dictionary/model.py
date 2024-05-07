@@ -13,6 +13,7 @@ class Dictionary:
   def __init__(self, entries: List[DictionaryEntry]):
     self.__entries = entries
     self.__simplified_map = {x.simplified: x for x in entries}
+    self.__traditional_map = {x.traditional: x for x in entries}
 
   def length(self):
     """Returns the number of entries present in the dictionary"""
@@ -21,3 +22,7 @@ class Dictionary:
   def find_simplified(self, simplified: str):
     """Searches for a word by its Simplified Chinese representation"""
     return self.__simplified_map[simplified]
+  
+  def find_traditional(self, traditional: str):
+    """Searches for a word by its Traditional Chinese representation"""
+    return self.__traditional_map[traditional]
