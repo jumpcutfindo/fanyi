@@ -24,8 +24,11 @@ class Controller:
 
   def __register_hotkeys(self):
     print("Registering hotkeys...")
+    # TODO: Figure out how to make this customisable
     self.__register_hotkey(
-        'request_capture', '<ctrl>+<alt>+h', lambda: self.on_full_capture())
+        'request_partial_capture', '<ctrl>+<alt>+g', lambda: self.on_partial_capture())
+    self.__register_hotkey(
+        'request_full_capture', '<ctrl>+<alt>+h', lambda: self.on_full_capture())
     self.__register_hotkey(
         'exit', '<ctrl>+<alt>+j', lambda: self.on_exit_app())
     print("Registered {} hotkeys".format(len(self.hotkeys)))
@@ -33,7 +36,24 @@ class Controller:
   def on_full_capture(self):
     print('Capturing and processing all displays...')
     filenames = screenshot.take_full_screenshot()
+    return self.__process_image(filenames)
 
+  def on_partial_capture(self):
+    print('Capturing and processing partial...')
+    # TODO: Figure out how to make this customisable
+    mon = screenshot.get_monitors()[2]
+    monitor = {
+        "top": mon["top"] + 100,
+        "left": mon["left"] + 100,
+        "width": 160,
+        "height": 768,
+        "mon": 2,
+    }
+
+    filenames = screenshot.take_partial_screenshot(monitor)
+    return self.__process_image(filenames)
+
+  def __process_image(self, filenames):
     print('Received {} files for processing, sending to OCR...'.format(len(filenames)))
 
     results = []
@@ -46,7 +66,6 @@ class Controller:
     print(phrases)
 
     print('Successfully processed files via OCR')
-    print(results)
     return results
 
   def __remove_non_chinese_items(self, items):
