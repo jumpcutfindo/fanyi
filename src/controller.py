@@ -38,9 +38,10 @@ class Controller:
     for filename in filenames:
       print('Processing file: {}'.format(filename))
       result = reader.read_traditional(filename)
-      print(result)
-      results.append(
-          list(filter(lambda x: re.findall(r'\\p{Han}', x), result)))
+      results.extend(result)
+
+    phrases = self.__parse_to_chinese_subphrases(results)
+    print(phrases)
 
     print('Successfully processed files via OCR')
     print(results)
