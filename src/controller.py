@@ -46,6 +46,56 @@ class Controller:
     print(results)
     return results
 
+  def __remove_non_chinese_items(self, items):
+    """Removes any items that do not contain Chinese from the results"""
+    return list(filter(lambda x: re.match(r'[^A-Za-z\d\s]+', x), items))
+
+  def __parse_to_chinese_subphrases(self, phrases):
+    """
+    Parses a list of phrases into smaller units.
+
+    It first attempts to match as large of a word as possible, and adds that
+    to the list of subphrases before continuing the search.
+
+    The return value is a dictionary of the phrase to its subphrases.
+    """
+    phrases = self.__remove_non_chinese_items(phrases)
+
+    phrases_map = {}
+
+    for phrase in phrases:
+      left, right, length = 0, 1, len(phrase)
+      max_phrase_len = 0
+      subphrases = []
+
+      while left < length:
+        curr = phrase[left:right]
+        subphrase = self.dictionary.find_traditional(curr)
+
+        if subphrase:
+          max_phrase_len += 1
+
+        if right >= length:
+          # Add the longest phrase to subphrases
+          subphrases.append(phrase[left:left+max_phrase_len])
+
+          # Reset to start of next potential phrase
+          if not max_phrase_len:
+            left = left + 1
+          else:
+            left = left + max_phrase_len
+
+          right = left
+          max_phrase_len = 0
+
+        # Move right pointer always
+        right += 1
+
+      subphrases = self.__remove_non_chinese_items(subphrases)
+      phrases_map[phrase] = subphrases
+
+    return phrases_map
+
   def on_exit_app(self):
     print('Exiting application...')
     self.input_listener.stop()
