@@ -61,16 +61,21 @@ class Controller:
     print('Received {} files for processing, sending to OCR...'.format(len(filenames)))
 
     results = []
+
+    # Send file(s) for processing, adding to results
     for filename in filenames:
       print('Processing file: {}'.format(filename))
       # TODO: Figure out how to make this customisable
       result = reader.read_simplified(filename)
       results.extend(result)
 
+    # Break results into smaller segments
     phrases = self.__parse_to_chinese_subphrases(results)
-    print(phrases)
 
-    # TODO: Implement mapping to dictionary for definitions and pinyin
+    # Map the results to their dictionary entries
+    for (phrase, subphrases) in phrases.items():
+      entries = list(map(lambda p: self.__map_to_dictionary_entry(p), subphrases))
+      phrases[phrase] = entries
 
     print('Successfully processed files via OCR')
     return results
@@ -106,9 +111,13 @@ class Controller:
 
     return phrases_map
 
+
   def on_show_monitor_info(self):
     print('Showing monitor info: {}'.format(screenshot.get_monitors()))
 
   def on_exit_app(self):
     print('Exiting application...')
     self.input_listener.stop()
+
+  def __map_to_dictionary_entry(self, phrase):
+    return self.dictionary.find_simplified(phrase)
