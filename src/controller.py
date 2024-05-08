@@ -1,6 +1,7 @@
+import re
+import pkuseg
 from screen import screenshot, reader
 from input.listener import InputListener
-import re
 
 
 class Controller:
@@ -44,13 +45,13 @@ class Controller:
   def on_partial_capture(self):
     print('Capturing and processing partial...')
     # TODO: Figure out how to make this customisable
-    mon = screenshot.get_monitors()[2]
+    mon = screenshot.get_monitors()[1]
     monitor = {
-        "top": mon["top"] + 100,
-        "left": mon["left"] + 100,
-        "width": 160,
-        "height": 768,
-        "mon": 2,
+        "top": mon["top"] + 1080,
+        "left": mon["left"] + 0,
+        "width": 2560,
+        "height": 180,
+        "mon": 1,
     }
 
     filenames = screenshot.take_partial_screenshot(monitor)
@@ -62,11 +63,14 @@ class Controller:
     results = []
     for filename in filenames:
       print('Processing file: {}'.format(filename))
-      result = reader.read_traditional(filename)
+      # TODO: Figure out how to make this customisable
+      result = reader.read_simplified(filename)
       results.extend(result)
 
     phrases = self.__parse_to_chinese_subphrases(results)
     print(phrases)
+
+    # TODO: Implement mapping to dictionary for definitions and pinyin
 
     print('Successfully processed files via OCR')
     return results
@@ -74,50 +78,31 @@ class Controller:
   def __remove_non_chinese_items(self, items):
     """Removes any items that do not contain Chinese from the results"""
     return list(filter(lambda x: re.match(r'[^A-Za-z\d\s]+', x), items))
+  
+  def __clean_words(self, items):
+    """Removes items that are considered unclean, and removes symbols from words"""
+    results = []
+    for item in items:
+      results.append(re.sub(r'[^\w\s]', '', item))
+    
+    results = list(filter(lambda x: re.match(r'\S', x), results))
+    return results
 
   def __parse_to_chinese_subphrases(self, phrases):
     """
     Parses a list of phrases into smaller units.
 
-    It first attempts to match as large of a word as possible, and adds that
-    to the list of subphrases before continuing the search.
-
-    The return value is a dictionary of the phrase to its subphrases.
+    Uses `pkuseg` to help with the segmentation.
     """
+    segmenter = pkuseg.pkuseg()
     phrases = self.__remove_non_chinese_items(phrases)
 
     phrases_map = {}
 
     for phrase in phrases:
-      left, right, length = 0, 1, len(phrase)
-      max_phrase_len = 0
-      subphrases = []
-
-      while left < length:
-        curr = phrase[left:right]
-        subphrase = self.dictionary.find_traditional(curr)
-
-        if subphrase:
-          max_phrase_len += 1
-
-        if right >= length:
-          # Add the longest phrase to subphrases
-          subphrases.append(phrase[left:left+max_phrase_len])
-
-          # Reset to start of next potential phrase
-          if not max_phrase_len:
-            left = left + 1
-          else:
-            left = left + max_phrase_len
-
-          right = left
-          max_phrase_len = 0
-
-        # Move right pointer always
-        right += 1
-
+      subphrases = segmenter.cut(phrase)
       subphrases = self.__remove_non_chinese_items(subphrases)
-      phrases_map[phrase] = subphrases
+      phrases_map[phrase] = self.__clean_words(subphrases)
 
     return phrases_map
 
