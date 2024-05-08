@@ -1,10 +1,15 @@
 from controller import Controller
+from dictionary import parser
 
 
 def main():
   print("Initializing application...")
 
-  controller = Controller()
+  # TODO: Implement a way to manage this
+  dictionary = parser.parse(
+      './.cache/cedict_ts.u8')
+
+  controller = Controller(dictionary)
   controller.start()
 
 
