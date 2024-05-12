@@ -109,6 +109,13 @@ class Controller:
       entries = list(map(lambda p: self.__map_to_dictionary_entry(p), subphrases))
       phrases[phrase] = entries
 
+      for entry in entries:
+        if entry:
+          print(f'{entry.simplified}({entry.traditional} | {entry.pinyin} | {entry.definitions})')
+        else:
+          # TODO: Handle cases where the word isn't found in the dictionary (provide pinyin?)
+          print(f'{entry} not found :(')
+
     print('Successfully processed files via OCR')
     return results
 
