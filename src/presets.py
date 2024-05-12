@@ -12,8 +12,11 @@ class PresetManager:
     self.presets = []
     self.preset_map = {}
 
+  def create_preset(self, name, screen, left, top, width, height):
+    return Preset(name, screen, left, top, width, height)
+
   def add_preset(self, name, screen, left, top, width, height):
-    preset = Preset(name, screen, left, top, width, height)
+    preset = self.create_preset(name, screen, left, top, width, height)
     self.presets.append(preset)
     self.preset_map[name] = preset
 

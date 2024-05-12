@@ -48,19 +48,19 @@ class Controller:
     filenames = screenshot.take_full_screenshot()
     return self.__process_image(filenames)
 
-  def on_partial_capture(self):
+  def on_partial_capture(self, preset):
     print('Capturing and processing partial...')
-    # TODO: Figure out how to make this customisable
-    mon = screenshot.get_monitors()[1]
-    monitor = {
-        "top": mon["top"] + 1080,
-        "left": mon["left"] + 0,
-        "width": 2560,
-        "height": 180,
-        "mon": 1,
+    
+    mon = screenshot.get_monitors()[preset.screen]
+    settings = {
+        "left": mon["left"] + preset.left,
+        "top": mon["top"] + preset.top,
+        "width": preset.width,
+        "height": preset.height,
+        "mon": preset.screen,
     }
 
-    filenames = screenshot.take_partial_screenshot(monitor)
+    filenames = screenshot.take_partial_screenshot(settings)
     return self.__process_image(filenames)
 
   def __process_image(self, filenames):

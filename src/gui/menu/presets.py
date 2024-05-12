@@ -2,9 +2,10 @@ import tkinter as tk
 from screen import screenshot
 
 class PresetsFrame:
-  def __init__(self, root, options_frame, preset_manager):
+  def __init__(self, root, options_frame, controller, preset_manager):
     self.root = root
     self.options_frame = options_frame
+    self.controller = controller;
     self.preset_manager = preset_manager
 
     screen_info = self.__get_screen_info()
@@ -19,6 +20,7 @@ class PresetsFrame:
 
     self.__preset_config_section()
     self.__preset_list_section()
+    self.__preset_controls_section()
 
   def __get_screen_info(self):
     screen_info = screenshot.get_monitors()
@@ -103,15 +105,6 @@ class PresetsFrame:
     self.screen_value_var.set(self.screen_display_names[0])
     self.__on_screen_selected(self.screen_value_var.get())
   
-  def __on_screen_selected(self, screen_name):
-    print(f'User has selected {screen_name}')
-
-    screen_info = self.screen_display_to_info_map[screen_name]
-    self.left_value_var.set(screen_info['left'])
-    self.top_value_var.set(screen_info['top'])
-    self.width_value_var.set(screen_info['width'])
-    self.height_value_var.set(screen_info['height'])
-
   def __preset_list_section(self):
     self.preset_list_frame = tk.Frame(self.options_frame)
     self.preset_list_frame.pack(side=tk.TOP, fill=tk.BOTH, pady=[0, 8],expand=True)
@@ -124,6 +117,22 @@ class PresetsFrame:
     for preset in preset_list:
       self.__add_preset_to_list_box(preset)
   
+  def __preset_controls_section(self):
+    self.preset_controls_frame = tk.Frame(self.options_frame)
+    self.preset_controls_frame.pack(side=tk.TOP, fill=tk.X)
+
+    screenshot_control = tk.Button(self.preset_controls_frame, text="Screenshot", command=self.__on_screenshot)
+    screenshot_control.pack(side=tk.TOP, fill=tk.X)
+
+  def __on_screen_selected(self, screen_name):
+    print(f'User has selected {screen_name}')
+
+    screen_info = self.screen_display_to_info_map[screen_name]
+    self.left_value_var.set(screen_info['left'])
+    self.top_value_var.set(screen_info['top'])
+    self.width_value_var.set(screen_info['width'])
+    self.height_value_var.set(screen_info['height'])
+
   def __add_preset_to_list_box(self, preset):
     self.preset_list_box.insert(0, preset.name)
 
@@ -152,3 +161,20 @@ class PresetsFrame:
 
   def __list_presets(self):
     return self.preset_manager.list_presets()
+  
+  def __get_preset_with_current_settings(self):
+    """
+    Returns a Preset with the current values populated in the input
+    """
+    return self.preset_manager.create_preset(
+      name=self.preset_name_var.get(),
+      screen=self.screen_display_to_info_map[self.screen_value_var.get()]['index'],
+      left=self.left_value_var.get(),
+      top=self.top_value_var.get(),
+      width=self.width_value_var.get(),
+      height=self.height_value_var.get()
+    )
+  
+  def __on_screenshot(self):
+    current_preset = self.__get_preset_with_current_settings()
+    self.controller.on_partial_capture(current_preset)

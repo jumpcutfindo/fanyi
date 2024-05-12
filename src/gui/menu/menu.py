@@ -2,7 +2,6 @@ import tkinter as tk
 
 from .settings import SettingsFrame
 from .presets import PresetsFrame
-from .controls import ControlsFrame
 
 class MenuFrame:
   def __init__(self, root, controller, preset_manager):
@@ -19,6 +18,4 @@ class MenuFrame:
     sep = tk.Frame(self.menu_frame, width=2, bd=1, relief='sunken')
     sep.pack(side=tk.TOP, fill=tk.X, padx=8, pady=8)
 
-    self.dimensions_frame = PresetsFrame(root, self.menu_frame, self.preset_manager)
-
-    self.controls_frame = ControlsFrame(root, self.menu_frame, self.controller)
+    self.presets_frame = PresetsFrame(root, self.menu_frame, self.controller, self.preset_manager)

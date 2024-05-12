@@ -15,7 +15,7 @@ class MainFrame:
     self.main_frame = tk.Frame(self.root, bd=1, relief=tk.SOLID)
     self.main_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-    self.options_frame = MenuFrame(self.main_frame, self.controller, self.preset_manager)
+    self.menu_frame = MenuFrame(self.main_frame, self.controller, self.preset_manager)
     self.result_frame = ResultFrame(self.main_frame, self.controller)
 
   def start(self):
