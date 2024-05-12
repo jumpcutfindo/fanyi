@@ -3,9 +3,10 @@ from tkinter.filedialog import askopenfilename
 
 class SettingsFrame:
 
-  def __init__(self, root, options_frame):
+  def __init__(self, root, options_frame, controller):
     self.root = root
     self.options_frame = options_frame
+    self.controller = controller
 
     self.settings_frame = tk.Frame(self.options_frame)
     self.settings_frame.pack(side=tk.TOP, fill=tk.X)
@@ -37,9 +38,15 @@ class SettingsFrame:
   
   def __choose_dict_file(self):
     filename = askopenfilename()
-    if filename:
-      print(filename)
+    print(f'User selected dictionary: {filename}')
+
+    try:
+      self.controller.parse_dictionary(filename)
+      
+      # Only update the value if successful
       self.dictionary_source_var.set(filename)
+    except:
+      print(f'Failed to parse dictionary: {filename}')
 
   def __language_setting(self):
     self.language_frame = tk.Frame(self.settings_frame)

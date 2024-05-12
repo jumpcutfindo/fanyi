@@ -1,20 +1,26 @@
 import re
 import pkuseg
+
+from dictionary import parser
 from screen import screenshot, reader
 from input.listener import InputListener
 
 
 class Controller:
-  def __init__(self, dictionary):
+  def __init__(self):
     self.input_listener = InputListener()
     self.hotkeys = []
     self.__register_hotkeys()
 
-    self.dictionary = dictionary
+    self.dictionary = None
 
   def start(self):
     print("Starting controller...")
     self.input_listener.start()
+
+  def parse_dictionary(self, path):
+    # TODO: Implement checks to see if dictionary is legit
+    self.dictionary = parser.parse(path)
 
   def __register_hotkey(self, name, combo, action):
     self.hotkeys.append({
@@ -71,6 +77,8 @@ class Controller:
 
     # Break results into smaller segments
     phrases = self.__parse_to_chinese_subphrases(results)
+
+    print(phrases)
 
     # Map the results to their dictionary entries
     for (phrase, subphrases) in phrases.items():
