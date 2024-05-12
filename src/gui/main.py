@@ -1,9 +1,12 @@
 import tkinter as tk
+
 from .options.options import OptionsFrame
 from .result import ResultFrame
 
 class MainFrame:
-  def __init__(self):
+  def __init__(self, controller):
+    self.controller = controller
+
     self.root = tk.Tk()
     self.root.title("Fanyi")
     self.root.geometry("800x600")

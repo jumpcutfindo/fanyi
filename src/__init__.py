@@ -6,7 +6,9 @@ from gui.main import MainFrame
 def main():
   print("Initializing application...")
 
-  gui = MainFrame()
+  controller = Controller()
+
+  gui = MainFrame(controller)
   gui.start()
 
   # TODO: Implement a way to manage this
