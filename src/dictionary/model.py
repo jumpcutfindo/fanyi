@@ -1,5 +1,9 @@
+from enum import Enum
 from typing import List
 
+class Language(Enum):
+  SIMPLIFIED = 0
+  TRADITIONAL = 1
 
 class DictionaryEntry:
   def __init__(self, traditional: str, simplified: str, pinyin: str, definitions: List[str]):

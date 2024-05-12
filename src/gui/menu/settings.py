@@ -56,7 +56,7 @@ class SettingsFrame:
     language_label.pack(side=tk.LEFT)
     
     language_var = tk.StringVar(self.root, "language")
-    languages = ["Simplified Chinese", "Traditional Chinese"] # TODO: Add actual languages supported
+    languages = self.controller.get_supported_languages()
     language_var.set(languages[0])  # Default selection
     language_dropdown = tk.OptionMenu(self.language_frame, language_var, *languages)
     language_dropdown.pack(side=tk.LEFT)

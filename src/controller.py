@@ -2,6 +2,7 @@ import re
 import pkuseg
 
 from dictionary import parser
+from dictionary.model import Language
 from screen import screenshot, reader
 from input.listener import InputListener
 
@@ -13,6 +14,7 @@ class Controller:
     self.__register_hotkeys()
 
     self.dictionary = None
+    self.language = Language.SIMPLIFIED
 
   def start(self):
     print("Starting controller...")
@@ -21,6 +23,12 @@ class Controller:
   def parse_dictionary(self, path):
     # TODO: Implement checks to see if dictionary is legit
     self.dictionary = parser.parse(path)
+
+  def set_language(self, language):
+    self.language = language
+
+  def get_supported_languages(self):
+    return [Language.SIMPLIFIED, Language.TRADITIONAL]
 
   def __register_hotkey(self, name, combo, action):
     self.hotkeys.append({
@@ -64,6 +72,12 @@ class Controller:
     return self.__process_image(filenames)
 
   def __process_image(self, filenames):
+    if not self.dictionary:
+      raise ValueError('No dictionary loaded')
+    
+    if not filenames:
+      raise ValueError('No filenames provided')
+
     print('Received {} files for processing, sending to OCR...'.format(len(filenames)))
 
     results = []
@@ -71,9 +85,19 @@ class Controller:
     # Send file(s) for processing, adding to results
     for filename in filenames:
       print('Processing file: {}'.format(filename))
-      # TODO: Figure out how to make this customisable
-      result = reader.read_simplified(filename)
-      results.extend(result)
+
+      result = None
+
+      # Process depending on the type of language the controller is set to
+      if self.language == Language.TRADITIONAL:
+        result = reader.read_traditional(filename)
+      else:
+        result = reader.read_simplified(filename)
+
+      if result:
+        results.extend(result)
+      else:
+        print("OCR did not detect any text of the selected language in the image")
 
     # Break results into smaller segments
     phrases = self.__parse_to_chinese_subphrases(results)
@@ -119,6 +143,10 @@ class Controller:
 
     return phrases_map
 
+  def __map_to_dictionary_entry(self, phrase):
+    if self.language == Language.TRADITIONAL:
+      return self.dictionary.find_traditional(phrase)
+    return self.dictionary.find_simplified(phrase)
 
   def on_show_monitor_info(self):
     print('Showing monitor info: {}'.format(screenshot.get_monitors()))
@@ -126,6 +154,3 @@ class Controller:
   def on_exit_app(self):
     print('Exiting application...')
     self.input_listener.stop()
-
-  def __map_to_dictionary_entry(self, phrase):
-    return self.dictionary.find_simplified(phrase)
