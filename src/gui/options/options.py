@@ -2,6 +2,7 @@ import tkinter as tk
 
 from .settings import SettingsFrame
 from .dimensions import DimensionsFrame
+from .controls import ControlsFrame
 
 class OptionsFrame:
   def __init__(self, root, controller):
@@ -18,3 +19,5 @@ class OptionsFrame:
     sep.pack(side=tk.TOP, fill=tk.X, padx=8, pady=8)
 
     self.dimensions_frame = DimensionsFrame(root, self.options_frame)
+
+    self.controls_frame = ControlsFrame(root, self.options_frame, self.controller)
