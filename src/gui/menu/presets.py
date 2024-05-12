@@ -116,8 +116,9 @@ class PresetsFrame:
     self.preset_list_frame = tk.Frame(self.options_frame)
     self.preset_list_frame.pack(side=tk.TOP, fill=tk.BOTH, pady=[0, 8],expand=True)
 
-    self.preset_list_box = tk.Listbox(self.preset_list_frame)
+    self.preset_list_box = tk.Listbox(self.preset_list_frame, selectmode=tk.SINGLE)
     self.preset_list_box.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+    self.preset_list_box.bind('<<ListboxSelect>>', self.__on_select_preset)
 
     preset_list = self.__list_presets()
     for preset in preset_list:
@@ -125,6 +126,18 @@ class PresetsFrame:
   
   def __add_preset_to_list_box(self, preset):
     self.preset_list_box.insert(0, preset.name)
+
+  def __on_select_preset(self, event):
+    w = event.widget
+    index = int(w.curselection()[0])
+    selected_preset = self.preset_manager.list_presets()[index]
+
+    self.preset_name_var.set(selected_preset.name)
+    self.screen_value_var.set(self.screen_display_names[selected_preset.screen])
+    self.left_value_var.set(selected_preset.left)
+    self.top_value_var.set(selected_preset.top)
+    self.width_value_var.set(selected_preset.width)
+    self.height_value_var.set(selected_preset.height)
   
   def __on_save_preset(self):
     preset_name = self.preset_name_var.get()
