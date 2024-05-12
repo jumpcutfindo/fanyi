@@ -1,5 +1,5 @@
 from controller import Controller
-from dictionary import parser
+from presets import PresetManager
 
 from gui.main import MainFrame
 
@@ -7,8 +7,9 @@ def main():
   print("Initializing application...")
 
   controller = Controller()
+  preset_manager = PresetManager()
 
-  gui = MainFrame(controller)
+  gui = MainFrame(controller, preset_manager)
   gui.start()
 
   # TODO: Implement a way to manage this

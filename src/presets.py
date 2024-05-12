@@ -17,6 +17,8 @@ class PresetManager:
     self.presets.append(preset)
     self.preset_map[name] = preset
 
+    return preset
+
   def get_preset(self, name):
     return self.preset_map[name]
 

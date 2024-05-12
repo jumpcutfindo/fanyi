@@ -2,14 +2,17 @@ import tkinter as tk
 from screen import screenshot
 
 class PresetsFrame:
-  def __init__(self, root, options_frame):
+  def __init__(self, root, options_frame, preset_manager):
     self.root = root
+    self.options_frame = options_frame
+    self.preset_manager = preset_manager
+
+    self.presets_list = []
+    self.name_to_presets_map = {}
 
     screen_info = self.__get_screen_info()
     self.screen_display_names = [f'{key}: {value["width"]}x{value["height"]}' for key, value in screen_info.items()]
     self.screen_display_to_info_map = {f'{key}: {value["width"]}x{value["height"]}': value for key, value in screen_info.items()}
-
-    self.options_frame = options_frame
 
     self.presets_frame = tk.Frame(self.options_frame)
     self.presets_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=False)
@@ -25,10 +28,13 @@ class PresetsFrame:
     
     screens = {}
     screens['Fullscreen'] = screen_info[0]
+    screens['Fullscreen']['index'] = 0
 
     for i in range(1, len(screen_info)):
-      screens['Screen ' + str(i)] = screen_info[i]
-    
+      name = 'Screen ' + str(i)
+      screens[name] = screen_info[i]
+      screens[name]['index'] = i
+
     return screens
 
   def __preset_config_section(self):
@@ -92,7 +98,7 @@ class PresetsFrame:
     self.delete_preset_button = tk.Button(self.preset_controls_frame, text="Delete")
     self.delete_preset_button.pack(side=tk.RIGHT, padx=2)
 
-    self.save_preset_button = tk.Button(self.preset_controls_frame, text="Save")
+    self.save_preset_button = tk.Button(self.preset_controls_frame, text="Save", command=self.__on_save_preset)
     self.save_preset_button.pack(side=tk.RIGHT, padx=2)
 
     # Set default screen selection
@@ -108,11 +114,32 @@ class PresetsFrame:
     self.width_value_var.set(screen_info['width'])
     self.height_value_var.set(screen_info['height'])
 
-
   def __preset_list_section(self):
     self.preset_list_frame = tk.Frame(self.options_frame)
     self.preset_list_frame.pack(side=tk.TOP, fill=tk.BOTH, pady=[0, 8],expand=True)
 
-    preset_list = tk.Listbox(self.preset_list_frame)
-    preset_list.insert(0, "Preset 1")
-    preset_list.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+    self.preset_list_box = tk.Listbox(self.preset_list_frame)
+    self.preset_list_box.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    preset_list = self.__list_presets()
+    for preset in preset_list:
+      self.__add_preset_to_list(preset)
+  
+  def __add_preset_to_list(self, preset):
+    self.presets_list.append(preset)
+    self.name_to_presets_map[preset.name] = preset
+    self.preset_list_box.insert(0, preset.name)
+  
+  def __on_save_preset(self):
+    preset_name = self.preset_name_var.get()
+    screen = self.screen_display_to_info_map[self.screen_value_var.get()]['index']
+    left = self.left_value_var.get()
+    top = self.top_value_var.get()
+    width = self.width_value_var.get()
+    height = self.height_value_var.get()
+
+    preset = self.preset_manager.add_preset(preset_name, screen, left, top, width, height)
+    self.__add_preset_to_list(preset)
+
+  def __list_presets(self):
+    return self.preset_manager.list_presets()

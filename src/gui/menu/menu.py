@@ -5,9 +5,10 @@ from .presets import PresetsFrame
 from .controls import ControlsFrame
 
 class MenuFrame:
-  def __init__(self, root, controller):
+  def __init__(self, root, controller, preset_manager):
     self.root = root
     self.controller = controller
+    self.preset_manager = preset_manager
 
     self.menu_frame = tk.Frame(root, width=280)
     self.menu_frame.pack(side=tk.LEFT, fill=tk.BOTH, padx=8, pady=8)
@@ -18,6 +19,6 @@ class MenuFrame:
     sep = tk.Frame(self.menu_frame, width=2, bd=1, relief='sunken')
     sep.pack(side=tk.TOP, fill=tk.X, padx=8, pady=8)
 
-    self.dimensions_frame = PresetsFrame(root, self.menu_frame)
+    self.dimensions_frame = PresetsFrame(root, self.menu_frame, self.preset_manager)
 
     self.controls_frame = ControlsFrame(root, self.menu_frame, self.controller)
