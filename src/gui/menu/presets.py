@@ -7,9 +7,6 @@ class PresetsFrame:
     self.options_frame = options_frame
     self.preset_manager = preset_manager
 
-    self.presets_list = []
-    self.name_to_presets_map = {}
-
     screen_info = self.__get_screen_info()
     self.screen_display_names = [f'{key}: {value["width"]}x{value["height"]}' for key, value in screen_info.items()]
     self.screen_display_to_info_map = {f'{key}: {value["width"]}x{value["height"]}': value for key, value in screen_info.items()}
@@ -48,6 +45,7 @@ class PresetsFrame:
     preset_name_label.grid(row=0, column=0, sticky=tk.W, pady=2)
 
     self.preset_name_var = tk.StringVar(self.root)
+    self.preset_name_var.set("New preset")
     preset_name_input = tk.Entry(self.preset_config_frame, textvariable=self.preset_name_var)
     preset_name_input.grid(row=0, column=1, sticky=tk.NSEW, padx=2, pady=2)
 
@@ -123,11 +121,9 @@ class PresetsFrame:
 
     preset_list = self.__list_presets()
     for preset in preset_list:
-      self.__add_preset_to_list(preset)
+      self.__add_preset_to_list_box(preset)
   
-  def __add_preset_to_list(self, preset):
-    self.presets_list.append(preset)
-    self.name_to_presets_map[preset.name] = preset
+  def __add_preset_to_list_box(self, preset):
     self.preset_list_box.insert(0, preset.name)
   
   def __on_save_preset(self):
@@ -139,7 +135,7 @@ class PresetsFrame:
     height = self.height_value_var.get()
 
     preset = self.preset_manager.add_preset(preset_name, screen, left, top, width, height)
-    self.__add_preset_to_list(preset)
+    self.__add_preset_to_list_box(preset)
 
   def __list_presets(self):
     return self.preset_manager.list_presets()
