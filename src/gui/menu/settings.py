@@ -31,7 +31,7 @@ class SettingsFrame:
     self.dictionary_source_var = tk.StringVar(self.root, "dict_src")
     self.dictionary_source_var.set("<no dictionary selected>")  # Default selection
     dictionary_source_input = tk.Entry(self.dictionary_source_frame, textvariable=self.dictionary_source_var)
-    dictionary_source_input.pack(side=tk.LEFT, fill=tk.X)
+    dictionary_source_input.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
     dictionary_source_choose_file_btn = tk.Button(self.dictionary_source_frame, text="Choose File", command=self.__choose_dict_file)
     dictionary_source_choose_file_btn.pack(side=tk.LEFT)

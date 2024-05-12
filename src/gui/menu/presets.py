@@ -1,7 +1,7 @@
 import tkinter as tk
 from screen import screenshot
 
-class DimensionsFrame:
+class PresetsFrame:
   def __init__(self, root, options_frame):
     self.root = root
 
@@ -11,11 +11,14 @@ class DimensionsFrame:
 
     self.options_frame = options_frame
 
-    self.dimensions_frame = tk.Frame(self.options_frame, background='blue')
-    self.dimensions_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=False)
+    self.presets_frame = tk.Frame(self.options_frame)
+    self.presets_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=False)
+    
+    presets_label = tk.Label(self.presets_frame, text="Presets")
+    presets_label.pack(side=tk.TOP, pady=[0, 8], anchor=tk.NW)
 
-    self.__add_dimension_configuration_frame()
-    self.__dimension_preset_list_frame()
+    self.__preset_config_section()
+    self.__preset_list_section()
 
   def __get_screen_info(self):
     screen_info = screenshot.get_monitors()
@@ -28,16 +31,13 @@ class DimensionsFrame:
     
     return screens
 
-  def __add_dimension_configuration_frame(self):
-    # Dimension configuration frame
-    self.dimension_configuration_frame = tk.Frame(self.dimensions_frame)
-    self.dimension_configuration_frame.pack(side=tk.TOP, fill=tk.X)
-
-    dimension_configuration_label = tk.Label(self.dimension_configuration_frame, text="Dimensions")
-    dimension_configuration_label.pack(side=tk.TOP, pady=[0, 8], anchor=tk.NW)
+  def __preset_config_section(self):
+    # Preset configuration frame
+    self.preset_config_frame = tk.Frame(self.presets_frame)
+    self.preset_config_frame.pack(side=tk.TOP, fill=tk.X)
 
     # Screen settings
-    self.screen_value_frame = tk.Frame(self.dimension_configuration_frame)
+    self.screen_value_frame = tk.Frame(self.preset_config_frame)
     self.screen_value_frame.pack(side=tk.TOP, fill=tk.BOTH, pady=[0, 8])
 
     screen_value_label = tk.Label(self.screen_value_frame, text="Screen:")
@@ -49,7 +49,7 @@ class DimensionsFrame:
 
     # Dimensions settings (top, left, height, width)
     # TODO: Populate the values with default screen vars
-    self.dimension_values_frame = tk.Frame(self.dimension_configuration_frame)
+    self.dimension_values_frame = tk.Frame(self.preset_config_frame)
     self.dimension_values_frame.pack(side=tk.TOP, fill=tk.X, pady=[0, 8])
 
     self.left_value_var = tk.IntVar(self.root)
@@ -94,12 +94,9 @@ class DimensionsFrame:
     self.height_value_var.set(screen_info['height'])
 
 
-  def __dimension_preset_list_frame(self):
+  def __preset_list_section(self):
     self.preset_list_frame = tk.Frame(self.options_frame)
     self.preset_list_frame.pack(side=tk.TOP, fill=tk.BOTH, pady=[0, 8],expand=True)
-
-    preset_list_label = tk.Label(self.preset_list_frame, text="Presets")
-    preset_list_label.pack(side=tk.TOP, pady=[0, 8], anchor=tk.NW)
 
     preset_list = tk.Listbox(self.preset_list_frame)
     preset_list.insert(0, "Preset 1")
