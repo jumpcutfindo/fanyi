@@ -35,22 +35,27 @@ class PresetsFrame:
     # Preset configuration frame
     self.preset_config_frame = tk.Frame(self.presets_frame)
     self.preset_config_frame.pack(side=tk.TOP, fill=tk.X)
+    self.preset_config_frame.grid_columnconfigure(1, weight=1)
 
-    # Screen settings
-    self.screen_value_frame = tk.Frame(self.preset_config_frame)
-    self.screen_value_frame.pack(side=tk.TOP, fill=tk.BOTH, pady=[0, 8])
+    # Preset name configuration
+    preset_name_label = tk.Label(self.preset_config_frame, text="Name:")
+    preset_name_label.grid(row=0, column=0, sticky=tk.W, pady=2)
 
-    screen_value_label = tk.Label(self.screen_value_frame, text="Screen:")
-    screen_value_label.pack(side=tk.LEFT)
+    self.preset_name_var = tk.StringVar(self.root)
+    preset_name_input = tk.Entry(self.preset_config_frame, textvariable=self.preset_name_var)
+    preset_name_input.grid(row=0, column=1, sticky=tk.NSEW, padx=2, pady=2)
+
+    # Screen configuration
+    screen_value_label = tk.Label(self.preset_config_frame, text="Screen:")
+    screen_value_label.grid(row=1, column=0, sticky=tk.W, pady=2)
 
     self.screen_value_var = tk.StringVar(self.root)
-    screen_dropdown = tk.OptionMenu(self.screen_value_frame, self.screen_value_var, *self.screen_display_names, command=self.__on_screen_selected)
-    screen_dropdown.pack(side=tk.LEFT)
+    screen_dropdown = tk.OptionMenu(self.preset_config_frame, self.screen_value_var, *self.screen_display_names, command=self.__on_screen_selected)
+    screen_dropdown.grid(row=1, column=1, sticky=tk.W, padx=2, pady=2)
 
-    # Dimensions settings (top, left, height, width)
-    # TODO: Populate the values with default screen vars
-    self.dimension_values_frame = tk.Frame(self.preset_config_frame)
-    self.dimension_values_frame.pack(side=tk.TOP, fill=tk.X, pady=[0, 8])
+    # Dimensions configuration (top, left, height, width)
+    self.dimension_values_frame = tk.Frame(self.presets_frame)
+    self.dimension_values_frame.pack(side=tk.TOP, fill=tk.X, pady=2)
 
     self.left_value_var = tk.IntVar(self.root)
     self.left_value_var.set(0)
@@ -80,7 +85,17 @@ class PresetsFrame:
     height_value_input = tk.Entry(self.dimension_values_frame, textvariable=self.height_value_var, width=5)
     height_value_input.pack(side=tk.LEFT, padx=[0, 4])
 
-    # Set default selection
+    # Preset controls
+    self.preset_controls_frame = tk.Frame(self.presets_frame)
+    self.preset_controls_frame.pack(side=tk.TOP, fill=tk.X, pady=2)
+
+    self.delete_preset_button = tk.Button(self.preset_controls_frame, text="Delete")
+    self.delete_preset_button.pack(side=tk.RIGHT, padx=2)
+
+    self.save_preset_button = tk.Button(self.preset_controls_frame, text="Save")
+    self.save_preset_button.pack(side=tk.RIGHT, padx=2)
+
+    # Set default screen selection
     self.screen_value_var.set(self.screen_display_names[0])
     self.__on_screen_selected(self.screen_value_var.get())
   
