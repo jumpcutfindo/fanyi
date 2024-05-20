@@ -105,7 +105,7 @@ class PresetsFrameContainer:
         self.preset_controls_frame.pack(side=tk.TOP, fill=tk.X, pady=2)
 
         self.delete_preset_button = tk.Button(
-            self.preset_controls_frame, text="Delete")
+            self.preset_controls_frame, text="Delete", command=self.__on_delete_preset)
         self.delete_preset_button.pack(side=tk.RIGHT, padx=2)
 
         self.save_preset_button = tk.Button(
@@ -151,10 +151,9 @@ class PresetsFrameContainer:
         preset_list = self.__list_presets()
 
         for preset in preset_list:
-            self.preset_list_box.insert(0, preset.name)
+            self.preset_list_box.insert('end', preset.name)
 
     def __on_select_preset(self, event):
-
         w = event.widget
         index = int(w.curselection()[0])
         self.selected_preset = self.root.get_preset_manager().list_presets()[
@@ -172,7 +171,6 @@ class PresetsFrameContainer:
         self.height_value_var.set(self.selected_preset.height)
 
     def __on_save_preset(self):
-
         preset_name = self.preset_name_var.get()
         screen = self.screen_display_to_info_map[self.screen_value_var.get(
         )]['index']
@@ -185,6 +183,14 @@ class PresetsFrameContainer:
 
         self.root.get_preset_manager().save_preset(
             preset_name, screen, left, top, width, height)
+
+        self.__load_presets_into_listbox()
+
+    def __on_delete_preset(self):
+        preset_name = self.preset_name_var.get()
+        self.root.get_preset_manager().delete_preset(preset_name)
+
+        logger.debug(f'User action: Deleted preset {preset_name}')
 
         self.__load_presets_into_listbox()
 

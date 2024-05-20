@@ -59,5 +59,10 @@ class PresetManager:
         return name in self.preset_map
 
     def delete_preset(self, name):
+        if not self.contains_preset(name):
+            return
+
         self.presets.remove(self.get_preset(name))
         del self.preset_map[name]
+
+        self.file_manager.save_presets_file(self.preset_map)
