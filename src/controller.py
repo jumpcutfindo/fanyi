@@ -1,5 +1,6 @@
 import re
 import pkuseg
+from loguru import logger
 
 from dictionary import parser
 from dictionary.model import Language
@@ -18,7 +19,7 @@ class Controller:
         self.language = Language.SIMPLIFIED
 
     def start(self):
-        print("Starting controller...")
+        logger.info("Starting controller...")
         self.input_listener.start()
 
     def parse_dictionary(self, path):
@@ -36,10 +37,11 @@ class Controller:
             name: name, combo: combo, action: action
         })
         self.input_listener.register_hotkey(name, combo, action)
-        print('Hotkey {} for action "{}"'.format(combo, name))
+        logger.debug(
+            'Hotkey: Registered {} for action "{}"'.format(combo, name))
 
     def __register_hotkeys(self):
-        print("Registering hotkeys...")
+        logger.info("Registering hotkeys...")
         # TODO: Figure out how to make this customisable
         self.__register_hotkey(
             'request_partial_capture', '<ctrl>+<alt>+g', lambda: self.on_partial_capture())
@@ -50,16 +52,16 @@ class Controller:
         self.__register_hotkey(
             'show_monitor_info', '<ctrl>+<alt>+m', lambda: self.on_show_monitor_info())
 
-        print("Registered {} hotkeys".format(len(self.hotkeys)))
+        logger.info("Registered {} hotkeys".format(len(self.hotkeys)))
 
     def on_full_capture(self):
-        print('Capturing and processing all displays...')
+        logger.info('Capturing and processing all displays...')
         filenames = screenshot.take_full_screenshot(
             self.file_manager.get_screenshots_directory())
         return self.__process_image(filenames)
 
     def on_partial_capture(self, preset):
-        print('Capturing and processing partial...')
+        logger.info('Capturing and processing partial...')
 
         mon = screenshot.get_monitors()[preset.screen]
         settings = {
@@ -81,14 +83,14 @@ class Controller:
         if not filenames:
             raise ValueError('No filenames provided')
 
-        print('Received {} files for processing, sending to OCR...'.format(
+        logger.info('Received {} files for processing, sending to OCR...'.format(
             len(filenames)))
 
         results = []
 
         # Send file(s) for processing, adding to results
         for filename in filenames:
-            print('Processing file: {}'.format(filename))
+            logger.info('Processing file: {}'.format(filename))
 
             result = None
 
@@ -101,7 +103,7 @@ class Controller:
             if result:
                 results.extend(result)
             else:
-                print(
+                logger.warning(
                     "OCR did not detect any text of the selected language in the image")
 
         # Break results into smaller segments
@@ -121,9 +123,9 @@ class Controller:
                           entry.pinyin} | {entry.definitions})')
                 else:
                     # TODO: Handle cases where the word isn't found in the dictionary (provide pinyin?)
-                    print(f'{entry} not found :(')
+                    logger.warning(f'{entry} not found :(')
 
-        print('Successfully processed files via OCR')
+        logger.success('Successfully processed files via OCR')
         return results
 
     def __remove_non_chinese_items(self, items):
@@ -163,8 +165,9 @@ class Controller:
         return self.dictionary.find_simplified(phrase)
 
     def on_show_monitor_info(self):
-        print('Showing monitor info: {}'.format(screenshot.get_monitors()))
+        logger.info('Showing monitor info: {}'.format(
+            screenshot.get_monitors()))
 
     def on_exit_app(self):
-        print('Exiting application...')
+        logger.info('Exiting application...')
         self.input_listener.stop()

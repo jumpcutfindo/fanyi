@@ -1,5 +1,6 @@
 import re
 from typing import List
+from loguru import logger
 
 from .model import Dictionary, DictionaryEntry
 
@@ -29,7 +30,7 @@ def __parse_line(line: str) -> DictionaryEntry:
 
 def parse(file_name: str) -> Dictionary:
     """Parses the given dictionary file into an application friendly format"""
-    print('Parsing Mandarin dictionary data...')
+    logger.info('Parsing Mandarin dictionary data...')
     raw_text = __read_file(file_name)
     raw_text = __remove_copyright(raw_text)
 
@@ -41,6 +42,7 @@ def parse(file_name: str) -> Dictionary:
 
     dictionary = Dictionary(entries)
 
-    print('Dictionary parsed with {} entries'.format(dictionary.length()))
+    logger.info('Dictionary parsed with {} entries'.format(
+        dictionary.length()))
 
     return dictionary

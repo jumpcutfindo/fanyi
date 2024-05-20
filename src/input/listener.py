@@ -1,4 +1,5 @@
 from pynput import keyboard
+from loguru import logger
 
 
 class InputListener:
@@ -16,7 +17,7 @@ class InputListener:
 
     def register_hotkey(self, name: str, combo: str, action):
         def modified_action():
-            print('Combo {} pressed for action "{}"'.format(combo, name))
+            logger.info('Combo {} pressed for action "{}"'.format(combo, name))
             action()
 
         self.hotkeys.append((name, combo, modified_action))

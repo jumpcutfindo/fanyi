@@ -1,4 +1,6 @@
 import tkinter as tk
+from loguru import logger
+
 from screen import screenshot
 
 
@@ -135,7 +137,7 @@ class PresetsFrameContainer:
         screenshot_control.pack(side=tk.TOP, fill=tk.X)
 
     def __on_screen_selected(self, screen_name):
-        print(f'User has selected {screen_name}')
+        logger.debug(f'User action: Selected screen {screen_name}')
 
         screen_info = self.screen_display_to_info_map[screen_name]
         self.left_value_var.set(screen_info['left'])
@@ -152,10 +154,14 @@ class PresetsFrameContainer:
             self.preset_list_box.insert(0, preset.name)
 
     def __on_select_preset(self, event):
+
         w = event.widget
         index = int(w.curselection()[0])
         self.selected_preset = self.root.get_preset_manager().list_presets()[
             index]
+
+        logger.debug(f'User action: Selected preset {
+                     self.selected_preset.name}')
 
         self.preset_name_var.set(self.selected_preset.name)
         self.screen_value_var.set(
@@ -166,6 +172,7 @@ class PresetsFrameContainer:
         self.height_value_var.set(self.selected_preset.height)
 
     def __on_save_preset(self):
+
         preset_name = self.preset_name_var.get()
         screen = self.screen_display_to_info_map[self.screen_value_var.get(
         )]['index']
@@ -173,6 +180,8 @@ class PresetsFrameContainer:
         top = self.top_value_var.get()
         width = self.width_value_var.get()
         height = self.height_value_var.get()
+
+        logger.debug(f'User action: Saving preset {preset_name}')
 
         self.root.get_preset_manager().save_preset(
             preset_name, screen, left, top, width, height)

@@ -1,4 +1,6 @@
 import tkinter as tk
+from loguru import logger
+
 from tkinter.filedialog import askopenfilename
 
 
@@ -43,15 +45,15 @@ class SettingsFrameContainer:
 
     def __choose_dict_file(self):
         filename = askopenfilename()
-        print(f'User selected dictionary: {filename}')
+        logger.debug(f'User action: Selected dictionary {filename}')
 
         try:
             self.root.get_controller().parse_dictionary(filename)
 
             # Only update the value if successful
             self.dictionary_source_var.set(filename)
-        except:
-            print(f'Failed to parse dictionary: {filename}')
+        except Exception as e:
+            logger.error(f'Failed to parse dictionary: {e}')
 
     def __language_setting(self):
         self.language_frame = tk.Frame(self.frame)
