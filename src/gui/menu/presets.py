@@ -124,9 +124,7 @@ class PresetsFrameContainer:
         self.preset_list_box.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self.preset_list_box.bind('<<ListboxSelect>>', self.__on_select_preset)
 
-        preset_list = self.__list_presets()
-        for preset in preset_list:
-            self.__add_preset_to_list_box(preset)
+        self.__load_presets_into_listbox()
 
     def __preset_controls_section(self):
         self.preset_controls_frame = tk.Frame(self.frame)
@@ -145,21 +143,27 @@ class PresetsFrameContainer:
         self.width_value_var.set(screen_info['width'])
         self.height_value_var.set(screen_info['height'])
 
-    def __add_preset_to_list_box(self, preset):
-        self.preset_list_box.insert(0, preset.name)
+    def __load_presets_into_listbox(self):
+        """Clears the listbox and re-inserts all presets"""
+        self.preset_list_box.delete(0, 'end')
+        preset_list = self.__list_presets()
+
+        for preset in preset_list:
+            self.preset_list_box.insert(0, preset.name)
 
     def __on_select_preset(self, event):
         w = event.widget
         index = int(w.curselection()[0])
-        selected_preset = self.root.get_preset_manager().list_presets()[index]
+        self.selected_preset = self.root.get_preset_manager().list_presets()[
+            index]
 
-        self.preset_name_var.set(selected_preset.name)
+        self.preset_name_var.set(self.selected_preset.name)
         self.screen_value_var.set(
-            self.screen_display_names[selected_preset.screen])
-        self.left_value_var.set(selected_preset.left)
-        self.top_value_var.set(selected_preset.top)
-        self.width_value_var.set(selected_preset.width)
-        self.height_value_var.set(selected_preset.height)
+            self.screen_display_names[self.selected_preset.screen])
+        self.left_value_var.set(self.selected_preset.left)
+        self.top_value_var.set(self.selected_preset.top)
+        self.width_value_var.set(self.selected_preset.width)
+        self.height_value_var.set(self.selected_preset.height)
 
     def __on_save_preset(self):
         preset_name = self.preset_name_var.get()
@@ -170,9 +174,10 @@ class PresetsFrameContainer:
         width = self.width_value_var.get()
         height = self.height_value_var.get()
 
-        preset = self.root.get_preset_manager().add_preset(
+        self.root.get_preset_manager().save_preset(
             preset_name, screen, left, top, width, height)
-        self.__add_preset_to_list_box(preset)
+
+        self.__load_presets_into_listbox()
 
     def __list_presets(self):
         return self.root.get_preset_manager().list_presets()
