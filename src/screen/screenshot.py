@@ -7,8 +7,7 @@ from loguru import logger
 def take_full_screenshot(save_location):
     logger.info('Taking full screenshot...')
 
-    filename = f'{save_location}\\{
-        __get_screenshot_name()}_all-monitors.png'
+    filename = f'{save_location}\\{__get_screenshot_name()}_all-monitors.png'
 
     sct = mss.mss()
     filenames = list(sct.save(mon=-1, output=filename))
@@ -20,8 +19,7 @@ def take_full_screenshot(save_location):
 def take_monitor_screenshot(save_location, monitor):
     logger.info('Taking monitor {} screenshot...'.format(monitor))
 
-    filename = f'{save_location}\\{
-        __get_screenshot_name()}_monitor-{monitor}.png'
+    filename = f'{save_location}\\{__get_screenshot_name()}_monitor-{monitor}.png'
 
     sct = mss.mss()
     filenames = sct.save(mon=monitor, output=filename)
@@ -39,8 +37,7 @@ def get_monitors():
 def take_partial_screenshot(save_location, params):
     logger.info('Taking partial screenshot with params: {}'.format(params))
 
-    filename = f'{save_location}\\{
-        __get_screenshot_name()}_partial.png'
+    filename = f'{save_location}\\{__get_screenshot_name()}_partial.png'
 
     sct = mss.mss()
     sct_img = sct.grab(params)

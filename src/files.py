@@ -22,7 +22,7 @@ class FileManager:
             logger.info(f'Local storage found @ {local_dir}')
 
     def get_local_directory(self):
-        return f'{os.getenv('LOCALAPPDATA')}\\fanyi'
+        return f'{os.getenv("LOCALAPPDATA")}\\fanyi'
 
     def get_screenshots_directory(self):
         return f'{self.get_local_directory()}\\screenshots'

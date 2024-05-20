@@ -10,10 +10,10 @@ class PresetsFrameContainer:
         self.parent = parent
 
         screen_info = self.__get_screen_info()
-        self.screen_display_names = [f'{key}: {value["width"]}x{
-            value["height"]}' for key, value in screen_info.items()]
-        self.screen_display_to_info_map = {f'{key}: {value["width"]}x{
-            value["height"]}': value for key, value in screen_info.items()}
+        self.screen_display_names = [
+            f'{key}: {value["width"]}x{value["height"]}' for key, value in screen_info.items()]
+        self.screen_display_to_info_map = {
+            f'{key}: {value["width"]}x{value["height"]}': value for key, value in screen_info.items()}
 
         self.frame = tk.Frame(self.parent.frame)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=False)
@@ -159,8 +159,8 @@ class PresetsFrameContainer:
         self.selected_preset = self.root.get_preset_manager().list_presets()[
             index]
 
-        logger.debug(f'User action: Selected preset {
-                     self.selected_preset.name}')
+        logger.debug(
+            f'User action: Selected preset {self.selected_preset.name}')
 
         self.preset_name_var.set(self.selected_preset.name)
         self.screen_value_var.set(

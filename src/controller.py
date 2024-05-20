@@ -117,8 +117,8 @@ class Controller:
 
             for entry in entries:
                 if entry:
-                    print(f'{entry.simplified}({entry.traditional} | {
-                          entry.pinyin} | {entry.definitions})')
+                    print(
+                        f'{entry.simplified}({entry.traditional} | {entry.pinyin} | {entry.definitions})')
                 else:
                     # TODO: Handle cases where the word isn't found in the dictionary (provide pinyin?)
                     logger.warning(f'{entry} not found :(')
