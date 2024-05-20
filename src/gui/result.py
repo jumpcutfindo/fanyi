@@ -1,11 +1,10 @@
 import tkinter as tk
 
-class ResultFrame:
-  def __init__(self, root, controller):
-    self.root = root
-    self.controller = controller
+class ResultFrameContainer:
+  def __init__(self, parent):
+    self.parent = parent
 
-    self.result_frame = tk.Frame(root, bd=1, relief=tk.SOLID)
+    self.result_frame = tk.Frame(parent.frame, bd=1, relief=tk.SOLID)
     self.result_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     self.__screenshot_frame()
     self.__translation_frame()

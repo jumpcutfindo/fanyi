@@ -1,21 +1,19 @@
 import tkinter as tk
 
-from .settings import SettingsFrame
-from .presets import PresetsFrame
+from .settings import SettingsFrameContainer
+from .presets import PresetsFrameContainer
 
-class MenuFrame:
-  def __init__(self, root, controller, preset_manager):
-    self.root = root
-    self.controller = controller
-    self.preset_manager = preset_manager
+class MenuFrameContainer:
+  def __init__(self, parent):
+    self.parent = parent
 
-    self.menu_frame = tk.Frame(root, width=280)
-    self.menu_frame.pack(side=tk.LEFT, fill=tk.BOTH, padx=8, pady=8)
-    self.menu_frame.pack_propagate(0)
+    self.frame = tk.Frame(self.parent.frame, width=280)
+    self.frame.pack(side=tk.LEFT, fill=tk.BOTH, padx=8, pady=8)
+    self.frame.pack_propagate(0)
 
-    self.settings_frame = SettingsFrame(root, self.menu_frame, self.controller)
+    self.settings_frame = SettingsFrameContainer(self.parent, self)
 
-    sep = tk.Frame(self.menu_frame, width=2, bd=1, relief='sunken')
+    sep = tk.Frame(self.frame, width=2, bd=1, relief='sunken')
     sep.pack(side=tk.TOP, fill=tk.X, padx=8, pady=8)
 
-    self.presets_frame = PresetsFrame(root, self.menu_frame, self.controller, self.preset_manager)
+    self.presets_frame = PresetsFrameContainer(self.parent, self)

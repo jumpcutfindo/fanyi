@@ -3,7 +3,7 @@ from ctypes import windll
 from controller import Controller
 from presets import PresetManager
 
-from gui.main import MainFrame
+from gui.main import MainFrameContainer
 
 def main():
   print("Initializing application...")
@@ -13,7 +13,7 @@ def main():
   controller = Controller()
   preset_manager = PresetManager()
 
-  gui = MainFrame(controller, preset_manager)
+  gui = MainFrameContainer(controller, preset_manager)
   gui.start()
 
   # TODO: Implement a way to manage this

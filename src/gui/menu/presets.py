@@ -1,21 +1,19 @@
 import tkinter as tk
 from screen import screenshot
 
-class PresetsFrame:
-  def __init__(self, root, options_frame, controller, preset_manager):
+class PresetsFrameContainer:
+  def __init__(self, root, parent):
     self.root = root
-    self.options_frame = options_frame
-    self.controller = controller;
-    self.preset_manager = preset_manager
+    self.parent = parent
 
     screen_info = self.__get_screen_info()
     self.screen_display_names = [f'{key}: {value["width"]}x{value["height"]}' for key, value in screen_info.items()]
     self.screen_display_to_info_map = {f'{key}: {value["width"]}x{value["height"]}': value for key, value in screen_info.items()}
 
-    self.presets_frame = tk.Frame(self.options_frame)
-    self.presets_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=False)
+    self.frame = tk.Frame(self.parent.frame)
+    self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=False)
     
-    presets_label = tk.Label(self.presets_frame, text="Presets")
+    presets_label = tk.Label(self.frame, text="Presets")
     presets_label.pack(side=tk.TOP, pady=[0, 8], anchor=tk.NW)
 
     self.__preset_config_section()
@@ -38,7 +36,7 @@ class PresetsFrame:
 
   def __preset_config_section(self):
     # Preset configuration frame
-    self.preset_config_frame = tk.Frame(self.presets_frame)
+    self.preset_config_frame = tk.Frame(self.frame)
     self.preset_config_frame.pack(side=tk.TOP, fill=tk.X)
     self.preset_config_frame.grid_columnconfigure(1, weight=1)
 
@@ -46,7 +44,7 @@ class PresetsFrame:
     preset_name_label = tk.Label(self.preset_config_frame, text="Name:")
     preset_name_label.grid(row=0, column=0, sticky=tk.W, pady=2)
 
-    self.preset_name_var = tk.StringVar(self.root)
+    self.preset_name_var = tk.StringVar(self.root.frame)
     self.preset_name_var.set("New preset")
     preset_name_input = tk.Entry(self.preset_config_frame, textvariable=self.preset_name_var)
     preset_name_input.grid(row=0, column=1, sticky=tk.NSEW, padx=2, pady=2)
@@ -55,36 +53,36 @@ class PresetsFrame:
     screen_value_label = tk.Label(self.preset_config_frame, text="Screen:")
     screen_value_label.grid(row=1, column=0, sticky=tk.W, pady=2)
 
-    self.screen_value_var = tk.StringVar(self.root)
+    self.screen_value_var = tk.StringVar(self.root.frame)
     screen_dropdown = tk.OptionMenu(self.preset_config_frame, self.screen_value_var, *self.screen_display_names, command=self.__on_screen_selected)
     screen_dropdown.grid(row=1, column=1, sticky=tk.W, padx=2, pady=2)
 
     # Dimensions configuration (top, left, height, width)
-    self.dimension_values_frame = tk.Frame(self.presets_frame)
+    self.dimension_values_frame = tk.Frame(self.frame)
     self.dimension_values_frame.pack(side=tk.TOP, fill=tk.X, pady=2)
 
-    self.left_value_var = tk.IntVar(self.root)
+    self.left_value_var = tk.IntVar(self.root.frame)
     self.left_value_var.set(0)
     left_label = tk.Label(self.dimension_values_frame, text="L:")
     left_label.pack(side=tk.LEFT)
     left_value_input = tk.Entry(self.dimension_values_frame, textvariable=self.left_value_var, width=5)
     left_value_input.pack(side=tk.LEFT, padx=[0, 4])
 
-    self.top_value_var = tk.IntVar(self.root)
+    self.top_value_var = tk.IntVar(self.root.frame)
     self.top_value_var.set(0)
     top_label = tk.Label(self.dimension_values_frame, text="T:")
     top_label.pack(side=tk.LEFT)
     top_value_input = tk.Entry(self.dimension_values_frame, textvariable=self.top_value_var, width=5)
     top_value_input.pack(side=tk.LEFT, padx=[0, 4])
 
-    self.width_value_var = tk.IntVar(self.root)
+    self.width_value_var = tk.IntVar(self.root.frame)
     self.width_value_var.set(0)
     width_label = tk.Label(self.dimension_values_frame, text="W:")
     width_label.pack(side=tk.LEFT)
     width_value_input = tk.Entry(self.dimension_values_frame, textvariable=self.width_value_var, width=5)
     width_value_input.pack(side=tk.LEFT, padx=[0, 4])
 
-    self.height_value_var = tk.IntVar(self.root)
+    self.height_value_var = tk.IntVar(self.root.frame)
     self.height_value_var.set(0)
     height_label = tk.Label(self.dimension_values_frame, text="H:")
     height_label.pack(side=tk.LEFT)
@@ -92,7 +90,7 @@ class PresetsFrame:
     height_value_input.pack(side=tk.LEFT, padx=[0, 4])
 
     # Preset controls
-    self.preset_controls_frame = tk.Frame(self.presets_frame)
+    self.preset_controls_frame = tk.Frame(self.frame)
     self.preset_controls_frame.pack(side=tk.TOP, fill=tk.X, pady=2)
 
     self.delete_preset_button = tk.Button(self.preset_controls_frame, text="Delete")
@@ -106,7 +104,7 @@ class PresetsFrame:
     self.__on_screen_selected(self.screen_value_var.get())
   
   def __preset_list_section(self):
-    self.preset_list_frame = tk.Frame(self.options_frame)
+    self.preset_list_frame = tk.Frame(self.frame)
     self.preset_list_frame.pack(side=tk.TOP, fill=tk.BOTH, pady=[0, 8],expand=True)
 
     self.preset_list_box = tk.Listbox(self.preset_list_frame, selectmode=tk.SINGLE)
@@ -118,7 +116,7 @@ class PresetsFrame:
       self.__add_preset_to_list_box(preset)
   
   def __preset_controls_section(self):
-    self.preset_controls_frame = tk.Frame(self.options_frame)
+    self.preset_controls_frame = tk.Frame(self.frame)
     self.preset_controls_frame.pack(side=tk.TOP, fill=tk.X)
 
     screenshot_control = tk.Button(self.preset_controls_frame, text="Screenshot", command=self.__on_screenshot)
@@ -139,7 +137,7 @@ class PresetsFrame:
   def __on_select_preset(self, event):
     w = event.widget
     index = int(w.curselection()[0])
-    selected_preset = self.preset_manager.list_presets()[index]
+    selected_preset = self.root.get_preset_manager().list_presets()[index]
 
     self.preset_name_var.set(selected_preset.name)
     self.screen_value_var.set(self.screen_display_names[selected_preset.screen])
@@ -156,17 +154,17 @@ class PresetsFrame:
     width = self.width_value_var.get()
     height = self.height_value_var.get()
 
-    preset = self.preset_manager.add_preset(preset_name, screen, left, top, width, height)
+    preset = self.root.get_preset_manager().add_preset(preset_name, screen, left, top, width, height)
     self.__add_preset_to_list_box(preset)
 
   def __list_presets(self):
-    return self.preset_manager.list_presets()
+    return self.root.get_preset_manager().list_presets()
   
   def __get_preset_with_current_settings(self):
     """
     Returns a Preset with the current values populated in the input
     """
-    return self.preset_manager.create_preset(
+    return self.root.get_preset_manager().create_preset(
       name=self.preset_name_var.get(),
       screen=self.screen_display_to_info_map[self.screen_value_var.get()]['index'],
       left=self.left_value_var.get(),
@@ -177,4 +175,4 @@ class PresetsFrame:
   
   def __on_screenshot(self):
     current_preset = self.__get_preset_with_current_settings()
-    self.controller.on_partial_capture(current_preset)
+    self.root.get_controller().on_partial_capture(current_preset)
