@@ -13,7 +13,7 @@ def main():
     windll.shcore.SetProcessDpiAwareness(1)
 
     file_manager = FileManager()
-    preset_manager = PresetManager()
+    preset_manager = PresetManager(file_manager)
     controller = Controller(file_manager)
 
     gui = MainFrameContainer(controller, preset_manager)

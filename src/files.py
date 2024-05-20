@@ -29,9 +29,11 @@ class FileManager:
         presets_file = self.get_presets_file()
 
         if (self.is_file_exists(presets_file)):
+            print('Presets file exists, loading...')
             return json.load(presets_file)
         else:
             # Create empty file if not exists
+            print('Presets file not found, creating new...')
             f = open(presets_file, 'w', encoding='utf-8')
             json.dump({}, f, ensure_ascii=False, indent=4)
             f.close()
