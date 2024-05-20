@@ -14,8 +14,8 @@ class MainFrameContainer:
     self.root.title("Fanyi")
 
     # Scale according to current DPI
-    scale = self.get_dpi() / ORIGINAL_DPI 
-    self.root.geometry(f"{self.scaled(800, scale)}x{self.scaled(600, scale)}")
+    self.scale = self.get_dpi() / ORIGINAL_DPI 
+    self.root.geometry(f"{self.scaled(800, self.scale)}x{self.scaled(600, self.scale)}")
 
     self.frame = tk.Frame(self.root, bd=1, relief=tk.SOLID)
     self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)

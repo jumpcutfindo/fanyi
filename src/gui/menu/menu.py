@@ -7,7 +7,7 @@ class MenuFrameContainer:
   def __init__(self, parent):
     self.parent = parent
 
-    self.frame = tk.Frame(self.parent.frame, width=280)
+    self.frame = tk.Frame(self.parent.frame, width=(self.parent.scale * 280))
     self.frame.pack(side=tk.LEFT, fill=tk.BOTH, padx=8, pady=8)
     self.frame.pack_propagate(0)
 
