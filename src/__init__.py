@@ -1,3 +1,5 @@
+from ctypes import windll
+
 from controller import Controller
 from presets import PresetManager
 
@@ -5,6 +7,8 @@ from gui.main import MainFrame
 
 def main():
   print("Initializing application...")
+
+  windll.shcore.SetProcessDpiAwareness(1)
 
   controller = Controller()
   preset_manager = PresetManager()
