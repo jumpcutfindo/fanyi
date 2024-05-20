@@ -1,4 +1,5 @@
 import os
+import json
 
 
 class FileManager:
@@ -20,6 +21,31 @@ class FileManager:
 
     def get_screenshots_directory(self):
         return f'{self.get_local_directory()}\\screenshots'
+
+    def get_presets_file(self):
+        return f'{self.get_local_directory()}\\presets.json'
+
+    def load_presets_file(self):
+        presets_file = self.get_presets_file()
+
+        if (self.is_file_exists(presets_file)):
+            return json.load(presets_file)
+        else:
+            # Create empty file if not exists
+            f = open(presets_file, 'w', encoding='utf-8')
+            json.dump({}, f, ensure_ascii=False, indent=4)
+            f.close()
+        return {}
+
+    def save_presets_file(self, contents):
+        presets_file = self.get_presets_file()
+
+        f = open(presets_file, 'w', encoding='utf-8')
+        json.dump(contents, f, ensure_ascii=False, indent=4)
+        f.close()
+
+    def is_file_exists(self, file):
+        return os.path.exists(file)
 
     def is_directory_exists(self, directory):
         return os.path.isdir(directory)
