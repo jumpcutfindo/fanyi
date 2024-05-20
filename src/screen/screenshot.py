@@ -3,46 +3,53 @@ import mss.tools
 from datetime import datetime
 
 
-def take_full_screenshot():
-  print('Taking full screenshot...')
-  sct = mss.mss()
-  filenames = list(sct.save(
-      mon=-1, output="{dt}_all-monitors.png".format(dt=__get_screenshot_name())))
-  print('Took the following screenshot(s): {}'.format(filenames))
+def take_full_screenshot(save_location):
+    print('Taking full screenshot...')
 
-  return filenames
+    filename = f'{save_location}\\{
+        __get_screenshot_name()}_all-monitors.png'
+
+    sct = mss.mss()
+    filenames = list(sct.save(mon=-1, output=filename))
+    print('Took the following screenshot(s): {}'.format(filenames))
+
+    return filenames
 
 
-def take_monitor_screenshot(monitor):
-  print('Taking monitor {} screenshot...'.format(monitor))
-  sct = mss.mss()
-  filenames = sct.save(
-      mon=monitor, output="{dt}_monitor-{mon}.png".format(dt=__get_screenshot_name(), mon=monitor))
+def take_monitor_screenshot(save_location, monitor):
+    print('Taking monitor {} screenshot...'.format(monitor))
 
-  print('Took the following screenshot(s): {}'.format(filenames))
+    filename = f'{save_location}\\{
+        __get_screenshot_name()}_monitor-{monitor}.png'
 
-  return filenames
+    sct = mss.mss()
+    filenames = sct.save(mon=monitor, output=filename)
+
+    print('Took the following screenshot(s): {}'.format(filenames))
+
+    return filenames
 
 
 def get_monitors():
-  sct = mss.mss()
-  return sct.monitors
+    sct = mss.mss()
+    return sct.monitors
 
 
-def take_partial_screenshot(params):
-  print('Taking partial screenshot with params: {}'.format(params))
-  sct = mss.mss()
+def take_partial_screenshot(save_location, params):
+    print('Taking partial screenshot with params: {}'.format(params))
 
-  filename = "{dt}_partial.png".format(dt=__get_screenshot_name())
+    filename = f'{save_location}\\{
+        __get_screenshot_name()}_partial.png'
 
-  sct_img = sct.grab(params)
+    sct = mss.mss()
+    sct_img = sct.grab(params)
 
-  mss.tools.to_png(sct_img.rgb, sct_img.size, output=filename)
+    mss.tools.to_png(sct_img.rgb, sct_img.size, output=filename)
 
-  print('Took the following screenshot(s): {}'.format([filename]))
+    print('Took the following screenshot(s): {}'.format([filename]))
 
-  return [filename]
+    return [filename]
 
 
 def __get_screenshot_name():
-  return datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+    return datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
