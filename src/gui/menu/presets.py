@@ -213,4 +213,4 @@ class PresetsFrameContainer:
 
     def __on_screenshot(self):
         current_preset = self.__get_preset_with_current_settings()
-        self.root.get_controller().on_partial_capture(current_preset)
+        self.root.on_screenshot(current_preset)

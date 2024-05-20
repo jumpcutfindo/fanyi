@@ -39,3 +39,6 @@ class MainFrameContainer:
 
     def get_controller(self):
         return self.controller
+
+    def on_screenshot(self, preset):
+        result = self.controller.on_partial_screenshot(preset)
