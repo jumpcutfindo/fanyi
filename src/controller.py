@@ -124,7 +124,7 @@ class Controller:
                     logger.warning(f'{entry} not found :(')
 
         logger.success('Successfully processed files via OCR')
-        return (read_text, phrases)
+        return (filenames, read_text, phrases)
 
     def __remove_non_chinese_items(self, items):
         """Removes any items that do not contain Chinese from the results"""

@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from .menu.menu import MenuFrameContainer
-from .result import ResultFrameContainer
+from .results.result import ResultFrameContainer
 
 ORIGINAL_DPI = 95
 
@@ -41,4 +41,5 @@ class MainFrameContainer:
         return self.controller
 
     def on_screenshot(self, preset):
-        result = self.controller.on_partial_screenshot(preset)
+        result = self.controller.on_partial_capture(preset)
+        self.result_frame.set_results(result[0], result[1], result[2])
