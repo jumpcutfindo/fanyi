@@ -86,7 +86,7 @@ class Controller:
         logger.info('Received {} files for processing, sending to OCR...'.format(
             len(filenames)))
 
-        results = []
+        read_text = []
 
         # Send file(s) for processing, adding to results
         for filename in filenames:
@@ -101,15 +101,13 @@ class Controller:
                 result = reader.read_simplified(filename)
 
             if result:
-                results.extend(result)
+                read_text.extend(result)
             else:
                 logger.warning(
                     "OCR did not detect any text of the selected language in the image")
 
         # Break results into smaller segments
-        phrases = self.__parse_to_chinese_subphrases(results)
-
-        print(phrases)
+        phrases = self.__parse_to_chinese_subphrases(read_text)
 
         # Map the results to their dictionary entries
         for (phrase, subphrases) in phrases.items():
@@ -126,7 +124,7 @@ class Controller:
                     logger.warning(f'{entry} not found :(')
 
         logger.success('Successfully processed files via OCR')
-        return results
+        return (read_text, phrases)
 
     def __remove_non_chinese_items(self, items):
         """Removes any items that do not contain Chinese from the results"""
