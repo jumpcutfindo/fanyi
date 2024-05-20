@@ -8,7 +8,7 @@ class ScreenshotFrameContainer:
 
         self.frame = tk.Frame(
             self.parent.frame, bd=1, relief=tk.SOLID)
-        self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.frame.pack(side=tk.TOP, fill=tk.BOTH)
 
         self.screenshot_src = ""
 
@@ -19,6 +19,9 @@ class ScreenshotFrameContainer:
         self.__create_image_frame()
 
     def __create_image_frame(self):
+        for widget in self.frame.winfo_children():
+            widget.destroy()
+
         panel = tk.Canvas(self.frame, bd=0, highlightthickness=0)
         panel.create_image(0, 0, image=self.screenshot,
                            anchor=tk.NW, tags="IMG")
