@@ -66,5 +66,9 @@ class SettingsFrameContainer:
         languages = self.root.get_controller().get_supported_languages()
         language_var.set(languages[0])  # Default selection
         language_dropdown = tk.OptionMenu(
-            self.language_frame, language_var, *languages)
+            self.language_frame, language_var, *languages, command=self.__on_select_language)
         language_dropdown.pack(side=tk.LEFT)
+
+    def __on_select_language(self, language):
+        self.root.get_controller().set_language(language)
+        logger.debug(f'User action: Selected language {language}')
