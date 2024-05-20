@@ -15,4 +15,5 @@ class ResultFrameContainer:
         self.translation_frame = TranslationsFrameContainer(self)
 
     def set_results(self, filenames, read_text, phrases):
-        print(phrases)
+        screenshot = filenames[0]
+        self.screenshot_frame.set_screenshot(screenshot)
