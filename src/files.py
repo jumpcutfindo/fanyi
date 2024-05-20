@@ -30,7 +30,8 @@ class FileManager:
 
         if (self.is_file_exists(presets_file)):
             print('Presets file exists, loading...')
-            return json.load(presets_file)
+            f = open(presets_file, 'r', encoding='utf-8')
+            return json.load(f)
         else:
             # Create empty file if not exists
             print('Presets file not found, creating new...')
@@ -42,8 +43,11 @@ class FileManager:
     def save_presets_file(self, contents):
         presets_file = self.get_presets_file()
 
+        def encoder(obj):
+            return vars(obj)
+
         f = open(presets_file, 'w', encoding='utf-8')
-        json.dump(contents, f, ensure_ascii=False, indent=4)
+        json.dump(contents, f, ensure_ascii=False, indent=4, default=encoder)
         f.close()
 
     def is_file_exists(self, file):

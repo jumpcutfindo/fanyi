@@ -28,6 +28,8 @@ class PresetManager:
         self.presets.append(preset)
         self.preset_map[name] = preset
 
+        self.file_manager.save_presets_file(self.preset_map)
+
         return preset
 
     def get_preset(self, name):
