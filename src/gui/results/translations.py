@@ -27,6 +27,7 @@ class TranslationsFrameContainer:
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
+        self.canvas = canvas;
         self.frame = scrollable_frame
 
     def __handle_resize(self, event):
@@ -43,9 +44,42 @@ class TranslationsFrameContainer:
         canvas.configure(scrollregion=canvas.bbox("all"))
 
     def set_translations(self, translations):
-        for key, words in translations.items():
-            frame = tk.Frame(self.frame, bd=1, relief=tk.SOLID)
-            frame.pack(fill=tk.X, pady=4, expand=True)
+        for index, (key, entries) in enumerate(translations.items()):
+            containing_frame = tk.Frame(self.frame, background='white')
+            containing_frame.pack(fill=tk.X, pady=8, padx=8, expand=True)
 
-            key_label = tk.Label(frame, text=key, font=('Arial', 12, 'bold'))
-            key_label.pack(anchor=tk.W, padx=5, pady=2)
+            # Sentence
+            key_label = tk.Label(
+                containing_frame, text=key, font=('Arial', 14), background='white')
+            key_label.pack(padx=8, pady=8, anchor=tk.W)
+
+            translation_frame = tk.Frame(containing_frame, background='white')
+            translation_frame.pack(fill=tk.X, padx=8, pady=8, expand=True)
+            translation_frame.columnconfigure(3, weight=1)
+
+            if not entries or len(entries) == 0:
+                not_exists_label = tk.Label(
+                    translation_frame, text='No words found', font='Arial 10 italic', background='white')
+                not_exists_label.grid(row=1, column=0, padx=8, pady=8, sticky=tk.W)
+                continue
+            
+            # Insert each entry as a line
+            for index, entry in enumerate(entries):
+                if not entry:
+                    continue
+
+                simplified_label = tk.Label(translation_frame, text=f'{entry.simplified}', font=('Arial', 10), background='white')
+                simplified_label.grid(row=index+1, column=0, padx=(0, 8), sticky=tk.NW)
+
+                traditional_label = tk.Label(translation_frame, text=f'({entry.traditional})', font=('Arial', 10), background='white')
+                traditional_label.grid(row=index+1, column=1, padx=8, sticky=tk.NW)
+
+                pinyin_label = tk.Label(translation_frame, text=f'{entry.pinyin}', font=('Arial', 10), background='white')
+                pinyin_label.grid(row=index+1, column=2, padx=8, sticky=tk.NW)
+
+                definitions = []
+                for i, d in enumerate(entry.definitions):
+                    definitions.append(f'{i+1}. {d}')
+                definitions_label = tk.Label(translation_frame, font=('Arial', 10), text='\n'.join(definitions), background='white', justify='left')                
+                definitions_label.grid(row=index+1, column=3, padx=8, pady=(0, 24), sticky=tk.NW)
+                
