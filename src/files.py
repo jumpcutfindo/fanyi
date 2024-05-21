@@ -75,6 +75,7 @@ class FileManager:
 
             json.dump({}, f, ensure_ascii=False, indent=4)
             f.close()
+        return {}
 
     def save_preferences_file(self, preferences):
         logger.info(f'Saving preferences...')

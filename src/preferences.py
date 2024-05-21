@@ -5,7 +5,10 @@ class PreferenceManager:
     def __init__(self, file_manager):
         self.file_manager = file_manager
 
-        self.preferences = {}
+        self.__load_all_preferences()
+
+    def __load_all_preferences(self):
+        self.preferences = self.file_manager.load_preferences_file()
 
     def save_preference(self, key: str, value: str):
         """
