@@ -5,12 +5,12 @@ class TranslationsFrameContainer:
     def __init__(self, parent):
         self.parent = parent
 
-        canvas = tk.Canvas(parent.frame)
+        canvas = tk.Canvas(parent.frame, background='red')
         scrollbar = tk.Scrollbar(
             parent.frame, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas)
+        scrollable_frame = tk.Frame(canvas, background='blue')
 
-        scrollable_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollable_frame.pack(side=tk.LEFT)
 
         canvas.create_window((0, 0), window=scrollable_frame,
                              anchor=tk.NW, tags=('canvas_frame'))
@@ -34,10 +34,9 @@ class TranslationsFrameContainer:
         canvas = event.widget
         canvas_frame = canvas.nametowidget(
             canvas.itemcget("canvas_frame", "window"))
-        min_width = canvas_frame.winfo_reqwidth()
+        canvas.itemconfigure("canvas_frame", width=event.width)
+        
         min_height = canvas_frame.winfo_reqheight()
-        if min_width < event.width:
-            canvas.itemconfigure("canvas_frame", width=event.width)
         if min_height < event.height:
             canvas.itemconfigure("canvas_frame", height=event.height)
 
@@ -81,5 +80,7 @@ class TranslationsFrameContainer:
                 for i, d in enumerate(entry.definitions):
                     definitions.append(f'{i+1}. {d}')
                 definitions_label = tk.Label(translation_frame, font=('Arial', 10), text='\n'.join(definitions), background='white', justify='left')                
-                definitions_label.grid(row=index+1, column=3, padx=8, pady=(0, 24), sticky=tk.NW)
+                # self.canvas.bind('<Configure>', lambda e: definitions_label.configure(
+                #     wraplength=pinyin_label.winfo_width()), add=True)
+                definitions_label.grid(row=index+1, column=3, padx=8, pady=(0, 24), sticky=tk.W)
                 
