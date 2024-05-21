@@ -7,9 +7,10 @@ ORIGINAL_DPI = 95
 
 
 class MainFrameContainer:
-    def __init__(self, controller, preset_manager):
+    def __init__(self, controller, preset_manager, preference_manager):
         self.controller = controller
         self.preset_manager = preset_manager
+        self.preference_manager = preference_manager
 
         self.root = tk.Tk()
         self.root.title("Fanyi")
@@ -34,11 +35,14 @@ class MainFrameContainer:
     def scaled(self, width, scale):
         return round(width * scale)
 
+    def get_controller(self):
+        return self.controller
+
     def get_preset_manager(self):
         return self.preset_manager
 
-    def get_controller(self):
-        return self.controller
+    def get_preference_manager(self):
+        return self.preference_manager
 
     def on_screenshot(self, preset):
         result = self.controller.on_partial_capture(preset)
