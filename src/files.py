@@ -30,6 +30,9 @@ class FileManager:
     def get_presets_file(self):
         return f'{self.get_local_directory()}\\presets.json'
 
+    def get_preferences_file(self):
+        return f'{self.get_local_directory()}\\preferences.json'
+
     def load_presets_file(self):
         presets_file = self.get_presets_file()
 
@@ -41,6 +44,8 @@ class FileManager:
             # Create empty file if not exists
             logger.info('Presets file not found, creating new...')
             f = open(presets_file, 'w', encoding='utf-8')
+
+            # By default, we pass an empty dictionary of items
             json.dump({}, f, ensure_ascii=False, indent=4)
             f.close()
         return {}
@@ -54,6 +59,33 @@ class FileManager:
 
         f = open(presets_file, 'w', encoding='utf-8')
         json.dump(contents, f, ensure_ascii=False, indent=4, default=encoder)
+        f.close()
+
+    def load_preferences_file(self):
+        preferences_file = self.get_preferences_file()
+
+        if (self.is_file_exists(preferences_file)):
+            logger.info('Preferences file exists, loading...')
+            f = open(preferences_file, 'r', encoding='utf-8')
+            return json.load(f)
+        else:
+            # Create empty file if not exists
+            logger.info('Preferences file not found, creating new...')
+            f = open(preferences_file, 'w', encoding='utf-8')
+
+            json.dump({}, f, ensure_ascii=False, indent=4)
+            f.close()
+
+    def save_preferences_file(self, preferences):
+        logger.info(f'Saving preferences...')
+        presets_file = self.get_preferences_file()
+
+        def encoder(obj):
+            return vars(obj)
+
+        f = open(presets_file, 'w', encoding='utf-8')
+        json.dump(preferences, f, ensure_ascii=False,
+                  indent=4, default=encoder)
         f.close()
 
     def is_file_exists(self, file):
