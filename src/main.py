@@ -21,20 +21,13 @@ def main():
     # Setup logical part of application
     file_manager = FileManager()
     preset_manager = PresetManager(file_manager)
-    preference_manager = PreferenceManager()
+    preference_manager = PreferenceManager(file_manager)
     controller = Controller(file_manager, preference_manager)
 
     # Setup GUI stuff
     windll.shcore.SetProcessDpiAwareness(1)
     gui = MainFrameContainer(controller, preset_manager)
     gui.start()
-
-    # TODO: Implement a way to manage this
-    # dictionary = parser.parse(
-    #     './.cache/cedict_ts.u8')
-
-    # controller = Controller(dictionary)
-    # controller.start()
 
 
 if __name__ == "__main__":
