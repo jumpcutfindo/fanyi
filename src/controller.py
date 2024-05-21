@@ -28,7 +28,7 @@ class Controller:
 
     def parse_dictionary(self, path):
         logger.info(f'Attempting to parse dictionary at "{path}"')
-        
+
         if not self.file_manager.is_file_exists(path):
             logger.error(f'Specified dictionary file "{path}" does not exist!')
 
@@ -39,6 +39,9 @@ class Controller:
             self.preference_manager.save_preference('dictionaryPath', path)
         except Exception as e:
             logger.error(f'Unable to parse dictionary file "{path}": {e}')
+
+    def get_dictionary(self):
+        return self.dictionary
 
     def __try_load_dictionary(self):
         logger.info('Checking if user previously loaded a dictionary...')

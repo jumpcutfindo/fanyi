@@ -34,15 +34,37 @@ class SettingsFrameContainer:
             self.__get_saved_dictionary_path())  # Default selection
         dictionary_source_input = tk.Entry(
             self.frame, textvariable=self.dictionary_source_var)
+        dictionary_source_input.config(state='disabled')
+        dictionary_source_input.bind(
+            "<1>", lambda event: dictionary_source_input.focus_set())
         dictionary_source_input.grid(row=1, column=1, sticky=tk.NSEW)
 
+        # Dictionary label and select button
+        bottom_right_frame = tk.Frame(self.frame)
+        bottom_right_frame.grid(
+            row=2, column=1, sticky=tk.NSEW, pady=8
+        )
+
         dictionary_source_choose_file_btn = tk.Button(
-            self.frame, text="Choose File", command=self.__choose_dict_file)
-        dictionary_source_choose_file_btn.grid(
-            row=2, column=1, pady=8, sticky=tk.E)
+            bottom_right_frame, text="Choose File", command=self.__choose_dict_file)
+        dictionary_source_choose_file_btn.pack(side=tk.RIGHT)
+
+        self.entry_count_var = tk.StringVar(self.root.frame, "entry_count")
+        self.entry_count_var.set(
+            f'{self.__get_entry_count()} entries'
+        )
+        entry_count = tk.Label(
+            bottom_right_frame, textvariable=self.entry_count_var
+        )
+        entry_count.pack(side=tk.RIGHT, padx=(0, 16))
 
     def __choose_dict_file(self):
         filename = askopenfilename()
+
+        if not filename:
+            logger.debug('User action: No file selected for dictionary')
+            return
+
         logger.debug(f'User action: Selected dictionary {filename}')
 
         try:
@@ -79,3 +101,11 @@ class SettingsFrameContainer:
         if not path:
             return '<No dictionary selected>'
         return path
+
+    def __get_entry_count(self):
+        dictionary = self.root.get_controller().get_dictionary()
+
+        if not dictionary:
+            return 0
+
+        return dictionary.length()
