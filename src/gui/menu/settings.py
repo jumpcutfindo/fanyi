@@ -50,13 +50,11 @@ class SettingsFrameContainer:
         dictionary_source_choose_file_btn.pack(side=tk.RIGHT)
 
         self.entry_count_var = tk.StringVar(self.root.frame, "entry_count")
-        self.entry_count_var.set(
-            f'{self.__get_entry_count()} entries'
-        )
-        entry_count = tk.Label(
+        self.entry_count_label = tk.Label(
             bottom_right_frame, textvariable=self.entry_count_var
         )
-        entry_count.pack(side=tk.RIGHT, padx=(0, 16))
+        self.entry_count_label.pack(side=tk.RIGHT, padx=(0, 16))
+        self.__set_displayed_entry_count(self.__get_entry_count())
 
     def __choose_dict_file(self):
         filename = askopenfilename()
@@ -72,8 +70,11 @@ class SettingsFrameContainer:
 
             # Only update the value if successful
             self.dictionary_source_var.set(filename)
+            self.__set_displayed_entry_count(self.__get_entry_count())
         except Exception as e:
             logger.error(f'Failed to parse dictionary: {e}')
+            self.entry_count_var.set('Parse error')
+            self.entry_count_label.config(fg='red')
 
     def __language_setting(self):
         language_label = tk.Label(self.frame, text="Language:")
@@ -109,3 +110,16 @@ class SettingsFrameContainer:
             return 0
 
         return dictionary.length()
+
+    def __set_displayed_entry_count(self, count):
+        if not self.entry_count_var or not self.entry_count_label:
+            return
+
+        self.entry_count_var.set(
+            f'{self.__get_entry_count()} entries'
+        )
+
+        if count > 0:
+            self.entry_count_label.config(fg='green')
+        else:
+            self.entry_count_label.config(fg='red')

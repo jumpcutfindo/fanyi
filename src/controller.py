@@ -39,6 +39,7 @@ class Controller:
             self.preference_manager.save_preference('dictionaryPath', path)
         except Exception as e:
             logger.error(f'Unable to parse dictionary file "{path}": {e}')
+            raise e
 
     def get_dictionary(self):
         return self.dictionary
