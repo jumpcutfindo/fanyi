@@ -20,18 +20,37 @@ class Controller:
         self.dictionary = None
         self.language = Language.SIMPLIFIED
 
+        self.__try_load_dictionary()
+
     def start(self):
         logger.info("Starting controller...")
         self.input_listener.start()
 
     def parse_dictionary(self, path):
+        logger.info(f'Attempting to parse dictionary at "{path}"')
+        
         if not self.file_manager.is_file_exists(path):
             logger.error(f'Specified dictionary file "{path}" does not exist!')
 
         try:
             self.dictionary = parser.parse(path)
+
+            # Save the path if parsing was successful
+            self.preference_manager.save_preference('dictionaryPath', path)
         except Exception as e:
             logger.error(f'Unable to parse dictionary file "{path}": {e}')
+
+    def __try_load_dictionary(self):
+        logger.info('Checking if user previously loaded a dictionary...')
+        saved_path = self.preference_manager.load_preference('dictionaryPath')
+
+        if not saved_path:
+            logger.info('No saved path for dictionary')
+            return
+        else:
+            logger.info(
+                'Saved path for dictionary found, attempting to parse...')
+            self.parse_dictionary(saved_path)
 
     def set_language(self, language):
         if type(language) == str:

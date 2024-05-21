@@ -42,7 +42,7 @@ def parse(file_name: str) -> Dictionary:
 
     dictionary = Dictionary(entries)
 
-    logger.info('Dictionary parsed with {} entries'.format(
+    logger.success('Dictionary parsed with {} entries'.format(
         dictionary.length()))
 
     return dictionary
