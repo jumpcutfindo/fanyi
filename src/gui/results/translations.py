@@ -50,6 +50,10 @@ class TranslationsFrameContainer:
                 containing_frame, text=key, font=('Arial', 14), background='white', justify='left', wraplength=self.frame.winfo_width() - 32)
             key_label.pack(padx=8, pady=8, anchor=tk.W)
 
+            # Bind sentence label to resize on window resize
+            self.canvas.bind('<Configure>', lambda e: key_label.configure(
+                wraplength=self.frame.winfo_width() - 32), add=True)
+
             translation_frame = tk.Frame(
                 containing_frame, background='white')
             translation_frame.pack(
@@ -86,8 +90,7 @@ class TranslationsFrameContainer:
                 for i, d in enumerate(entry.definitions):
                     definitions.append(f'{i+1}. {d}')
                 definitions_label = tk.Label(translation_frame, font=(
-                    'Arial', 10), text='\n'.join(definitions), background='white', justify='left')
-                # self.canvas.bind('<Configure>', lambda e: definitions_label.configure(
-                #     wraplength=pinyin_label.winfo_width()), add=True)
+                    'Arial', 10), text='\n'.join(definitions), background='white', justify='left', wraplength=300)
+
                 definitions_label.grid(
                     row=index, column=3, padx=8, pady=(0, 24), sticky=tk.W)
