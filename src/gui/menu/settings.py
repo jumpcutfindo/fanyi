@@ -16,6 +16,8 @@ class SettingsFrameContainer:
         settings_label = tk.Label(self.frame, text="Settings")
         settings_label.pack(side=tk.TOP, pady=[0, 8], anchor=tk.NW)
 
+        self.__load_supported_languages()
+
         self.__dictionary_source_setting()
         self.__language_setting()
 
@@ -63,12 +65,16 @@ class SettingsFrameContainer:
         language_label.pack(side=tk.LEFT)
 
         language_var = tk.StringVar(self.root.frame, "language")
-        languages = self.root.get_controller().get_supported_languages()
-        language_var.set(languages[0])  # Default selection
+
+        language_var.set(list(self.supported_languages.values())[0])
         language_dropdown = tk.OptionMenu(
-            self.language_frame, language_var, *languages, command=self.__on_select_language)
+            self.language_frame, language_var, *self.supported_languages.values(), command=self.__on_select_language)
+
         language_dropdown.pack(side=tk.LEFT)
 
     def __on_select_language(self, language):
         self.root.get_controller().set_language(language)
         logger.debug(f'User action: Selected language {language}')
+
+    def __load_supported_languages(self):
+        self.supported_languages = self.root.get_controller().get_supported_languages()

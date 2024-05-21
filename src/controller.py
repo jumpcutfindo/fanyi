@@ -27,10 +27,13 @@ class Controller:
         self.dictionary = parser.parse(path)
 
     def set_language(self, language):
-        self.language = language
+        if type(language) == str:
+            self.language = Language(language)
+        else:
+            self.language = language
 
     def get_supported_languages(self):
-        return [Language.SIMPLIFIED, Language.TRADITIONAL]
+        return {lang.name: lang.value for lang in Language}
 
     def __register_hotkey(self, name, combo, action):
         self.hotkeys.append({

@@ -3,8 +3,8 @@ from typing import List
 
 
 class Language(Enum):
-    SIMPLIFIED = 0
-    TRADITIONAL = 1
+    SIMPLIFIED = 'Simplified Chinese'
+    TRADITIONAL = 'Traditional Chinese'
 
 
 class DictionaryEntry:
