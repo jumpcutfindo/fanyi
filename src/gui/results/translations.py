@@ -52,7 +52,7 @@ class TranslationsFrameContainer:
 
             # Sentence
             key_label = tk.Label(
-                containing_frame, text=key, font=('Arial', 14), background='white')
+                containing_frame, text=key, font=('Arial', 14), background='white', justify='left', wraplength=self.frame.winfo_width() - 32)
             key_label.pack(padx=8, pady=8, anchor=tk.W)
 
             translation_frame = tk.Frame(containing_frame, background='white')
