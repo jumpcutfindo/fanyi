@@ -26,7 +26,7 @@ def main():
 
     # Setup GUI stuff
     windll.shcore.SetProcessDpiAwareness(1)
-    gui = MainFrameContainer(controller, preset_manager)
+    gui = MainFrameContainer(controller, preset_manager, preference_manager)
     gui.start()
 
 

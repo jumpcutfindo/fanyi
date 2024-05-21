@@ -36,7 +36,7 @@ class SettingsFrameContainer:
 
         self.dictionary_source_var = tk.StringVar(self.root.frame, "dict_src")
         self.dictionary_source_var.set(
-            "<no dictionary selected>")  # Default selection
+            self.__get_saved_dictionary_path())  # Default selection
         dictionary_source_input = tk.Entry(
             self.dictionary_source_frame, textvariable=self.dictionary_source_var)
         dictionary_source_input.pack(side=tk.LEFT, fill=tk.X, expand=True)
@@ -78,3 +78,10 @@ class SettingsFrameContainer:
 
     def __load_supported_languages(self):
         self.supported_languages = self.root.get_controller().get_supported_languages()
+
+    def __get_saved_dictionary_path(self):
+        path = self.root.get_preference_manager().load_preference('dictionaryPath')
+
+        if not path:
+            return '<No dictionary selected>'
+        return path
