@@ -14,9 +14,9 @@ class Preset:
 class PresetManager:
     def __init__(self, file_manager):
         self.file_manager = file_manager
-        self.load_presets()
+        self.__load_presets()
 
-    def load_presets(self):
+    def __load_presets(self):
         self.presets = []
         self.preset_map = {}
 
