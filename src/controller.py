@@ -9,8 +9,10 @@ from input.listener import InputListener
 
 
 class Controller:
-    def __init__(self, file_manager):
+    def __init__(self, file_manager, preference_manager):
         self.file_manager = file_manager
+        self.preference_manager = preference_manager
+
         self.input_listener = InputListener()
         self.hotkeys = []
         self.__register_hotkeys()

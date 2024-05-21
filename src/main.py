@@ -6,6 +6,7 @@ from loguru import logger
 from controller import Controller
 from presets import PresetManager
 from files import FileManager
+from preferences import PreferenceManager
 
 from gui.main import MainFrameContainer
 
@@ -20,7 +21,8 @@ def main():
     # Setup logical part of application
     file_manager = FileManager()
     preset_manager = PresetManager(file_manager)
-    controller = Controller(file_manager)
+    preference_manager = PreferenceManager()
+    controller = Controller(file_manager, preference_manager)
 
     # Setup GUI stuff
     windll.shcore.SetProcessDpiAwareness(1)
