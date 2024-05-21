@@ -25,8 +25,13 @@ class Controller:
         self.input_listener.start()
 
     def parse_dictionary(self, path):
-        # TODO: Implement checks to see if dictionary is legit
-        self.dictionary = parser.parse(path)
+        if not self.file_manager.is_file_exists(path):
+            logger.error(f'Specified dictionary file "{path}" does not exist!')
+
+        try:
+            self.dictionary = parser.parse(path)
+        except Exception as e:
+            logger.error(f'Unable to parse dictionary file "{path}": {e}')
 
     def set_language(self, language):
         if type(language) == str:
