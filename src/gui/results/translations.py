@@ -5,10 +5,10 @@ class TranslationsFrameContainer:
     def __init__(self, parent):
         self.parent = parent
 
-        canvas = tk.Canvas(parent.frame, background='red')
+        canvas = tk.Canvas(parent.frame)
         scrollbar = tk.Scrollbar(
             parent.frame, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas, background='blue')
+        scrollable_frame = tk.Frame(canvas)
 
         scrollable_frame.pack(side=tk.LEFT)
 
@@ -47,7 +47,7 @@ class TranslationsFrameContainer:
 
             # Sentence
             key_label = tk.Label(
-                containing_frame, text=key, font=('Arial', 14), background='white', justify='left', wraplength=self.frame.winfo_width() - 32)
+                containing_frame, text=key, font=('Microsoft Yahei', 14), background='white', justify='left', wraplength=self.frame.winfo_width() - 32)
             key_label.pack(padx=8, pady=8, anchor=tk.W)
 
             # Bind sentence label to resize on window resize
@@ -62,7 +62,7 @@ class TranslationsFrameContainer:
 
             if not entries or len(entries) == 0:
                 not_exists_label = tk.Label(
-                    translation_frame, text='No words found', font='Arial 10 italic', background='white')
+                    translation_frame, text='No words found', font='Microsoft Yahei 10 italic', background='white')
                 not_exists_label.grid(
                     row=0, column=0, padx=8, pady=8, sticky=tk.W)
                 continue
@@ -73,24 +73,27 @@ class TranslationsFrameContainer:
                     continue
 
                 simplified_label = tk.Label(translation_frame, text=f'{entry.simplified}', font=(
-                    'Arial', 10), background='white')
+                    'Microsoft Yahei', 10), background='white')
                 simplified_label.grid(
                     row=index, column=0, padx=(0, 8), sticky=tk.NW)
 
                 traditional_label = tk.Label(translation_frame, text=f'({entry.traditional})', font=(
-                    'Arial', 10), background='white')
+                    'Microsoft Yahei', 10), background='white')
                 traditional_label.grid(
                     row=index, column=1, padx=8, sticky=tk.NW)
 
                 pinyin_label = tk.Label(translation_frame, text=f'{entry.pinyin}', font=(
-                    'Arial', 10), background='white')
+                    'Microsoft Yahei', 10), background='white')
                 pinyin_label.grid(row=index, column=2, padx=8, sticky=tk.NW)
 
                 definitions = []
                 for i, d in enumerate(entry.definitions):
                     definitions.append(f'{i+1}. {d}')
                 definitions_label = tk.Label(translation_frame, font=(
-                    'Arial', 10), text='\n'.join(definitions), background='white', justify='left', wraplength=300)
+                    'Microsoft Yahei', 10), text='\n'.join(definitions), background='white', justify='left', wraplength=300)
+
+                definitions_label_padding_y = 16 if index < len(
+                    entries) - 1 else 0
 
                 definitions_label.grid(
-                    row=index, column=3, padx=8, pady=(0, 24), sticky=tk.W)
+                    row=index, column=3, padx=8, pady=(0, definitions_label_padding_y), sticky=tk.W)
