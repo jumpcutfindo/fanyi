@@ -1,15 +1,19 @@
 import re
+from typing import Callable, cast
 import pkuseg
 from loguru import logger
 
 from dictionary import parser
-from dictionary.model import Language
+from dictionary.model import Dictionary, DictionaryEntry, Language
+from files import FileManager
+from preferences import PreferenceManager
+from presets.preset_manager import Preset
 from screen import screenshot, reader
 from input.listener import InputListener
 
 
 class Controller:
-    def __init__(self, file_manager, preference_manager):
+    def __init__(self, file_manager: FileManager, preference_manager: PreferenceManager):
         self.file_manager = file_manager
         self.preference_manager = preference_manager
 
@@ -17,8 +21,8 @@ class Controller:
         self.hotkeys = []
         self.__register_hotkeys()
 
-        self.dictionary = None
-        self.language = Language.SIMPLIFIED
+        self.dictionary: Dictionary | None = None
+        self.language: Language = Language.SIMPLIFIED
 
         self.__try_load_dictionary()
 
@@ -26,7 +30,7 @@ class Controller:
         logger.info("Starting controller...")
         self.input_listener.start()
 
-    def parse_dictionary(self, path):
+    def parse_dictionary(self, path: str):
         logger.info(f'Attempting to parse dictionary at "{path}"')
 
         if not self.file_manager.is_file_exists(path):
@@ -41,7 +45,7 @@ class Controller:
             logger.error(f'Unable to parse dictionary file "{path}": {e}')
             raise e
 
-    def get_dictionary(self):
+    def get_dictionary(self) -> Dictionary | None:
         return self.dictionary
 
     def __try_load_dictionary(self):
@@ -56,16 +60,13 @@ class Controller:
                 'Saved path for dictionary found, attempting to parse...')
             self.parse_dictionary(saved_path)
 
-    def set_language(self, language):
-        if type(language) == str:
-            self.language = Language(language)
-        else:
-            self.language = language
+    def set_language(self, language: Language | str):
+        self.language = Language(language);
 
-    def get_supported_languages(self):
+    def get_supported_languages(self) -> dict[str, str]:
         return {lang.name: lang.value for lang in Language}
 
-    def __register_hotkey(self, name, combo, action):
+    def __register_hotkey(self, name: str, combo: str, action: Callable):
         self.hotkeys.append({
             name: name, combo: combo, action: action
         })
@@ -76,10 +77,6 @@ class Controller:
     def __register_hotkeys(self):
         logger.info("Registering hotkeys...")
         # TODO: Figure out how to make this customisable
-        self.__register_hotkey(
-            'request_partial_capture', '<ctrl>+<alt>+g', lambda: self.on_partial_capture())
-        self.__register_hotkey(
-            'request_full_capture', '<ctrl>+<alt>+h', lambda: self.on_full_capture())
         self.__register_hotkey(
             'exit', '<ctrl>+<alt>+e', lambda: self.on_exit_app())
         self.__register_hotkey(
@@ -93,7 +90,7 @@ class Controller:
             self.file_manager.get_screenshots_directory())
         return self.__process_image(filenames)
 
-    def on_partial_capture(self, preset):
+    def on_partial_capture(self, preset: Preset):
         logger.info('Capturing and processing partial...')
 
         mon = screenshot.get_monitors()[preset.screen]
@@ -109,7 +106,7 @@ class Controller:
             self.file_manager.get_screenshots_directory(), settings)
         return self.__process_image(filenames)
 
-    def __process_image(self, filenames):
+    def __process_image(self, filenames: list[str]):
         if not self.dictionary:
             raise ValueError('No dictionary loaded')
 
@@ -142,28 +139,24 @@ class Controller:
         # Break results into smaller segments
         phrases = self.__parse_to_chinese_subphrases(read_text)
 
+        mapped_phrases = {}
+
         # Map the results to their dictionary entries
         for (phrase, subphrases) in phrases.items():
             entries = list(
                 map(lambda p: self.__map_to_dictionary_entry(p), subphrases))
-            phrases[phrase] = entries
 
-            for entry in entries:
-                if entry:
-                    print(
-                        f'{entry.simplified}({entry.traditional} | {entry.pinyin} | {entry.definitions})')
-                else:
-                    # TODO: Handle cases where the word isn't found in the dictionary (provide pinyin?)
-                    logger.warning(f'{entry} not found :(')
+            # TODO: Handle cases where the word isn't found in the dictionary (provide pinyin?)
+            mapped_phrases[phrase] = entries
 
         logger.success('Successfully processed files via OCR')
-        return (filenames, phrases)
+        return (filenames, mapped_phrases)
 
-    def __remove_non_chinese_items(self, items):
+    def __remove_non_chinese_items(self, items: list[str]) -> list[str]:
         """Removes any items that do not contain Chinese from the results"""
         return list(filter(lambda x: re.match(r'[^A-Za-z\d\s]+', x), items))
 
-    def __clean_words(self, items):
+    def __clean_words(self, items: list[str]) -> list[str]:
         """Removes items that are considered unclean, and removes symbols from words"""
         results = []
         for item in items:
@@ -172,7 +165,7 @@ class Controller:
         results = list(filter(lambda x: re.match(r'\S', x), results))
         return results
 
-    def __parse_to_chinese_subphrases(self, phrases):
+    def __parse_to_chinese_subphrases(self, phrases) -> dict[str, list[str]]:
         """
         Parses a list of phrases into smaller units.
 
@@ -184,16 +177,26 @@ class Controller:
         phrases_map = {}
 
         for phrase in phrases:
-            subphrases = segmenter.cut(phrase)
+            subphrases = cast(list[str], segmenter.cut(phrase))
             subphrases = self.__remove_non_chinese_items(subphrases)
             phrases_map[phrase] = self.__clean_words(subphrases)
 
         return phrases_map
 
-    def __map_to_dictionary_entry(self, phrase):
+    def __map_to_dictionary_entry(self, phrase: str) -> DictionaryEntry | None:
+        if not self.dictionary:
+            return None
+        
+        result = None
         if self.language == Language.TRADITIONAL:
-            return self.dictionary.find_traditional(phrase)
-        return self.dictionary.find_simplified(phrase)
+            result = self.dictionary.find_traditional(phrase)
+        else:
+            result = self.dictionary.find_simplified(phrase)
+
+        if not result:
+            logger.warning(f'{phrase} not found :(')
+
+        return result
 
     def on_show_monitor_info(self):
         logger.info('Showing monitor info: {}'.format(

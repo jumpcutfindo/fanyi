@@ -25,13 +25,13 @@ class Dictionary:
         """Returns the number of entries present in the dictionary"""
         return len(self.__entries)
 
-    def find_simplified(self, simplified: str):
+    def find_simplified(self, simplified: str) -> DictionaryEntry | None:
         """Searches for a word by its Simplified Chinese representation"""
         if simplified in self.__simplified_map:
             return self.__simplified_map[simplified]
         return None
 
-    def find_traditional(self, traditional: str):
+    def find_traditional(self, traditional: str) -> DictionaryEntry | None:
         """Searches for a word by its Traditional Chinese representation"""
         if traditional in self.__traditional_map:
             return self.__traditional_map[traditional]

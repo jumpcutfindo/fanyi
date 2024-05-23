@@ -2,6 +2,8 @@ import os
 import json
 from loguru import logger
 
+from presets.preset import Preset
+
 
 class FileManager:
     def __init__(self):
@@ -50,7 +52,7 @@ class FileManager:
             f.close()
         return {}
 
-    def save_presets_file(self, contents):
+    def save_presets_file(self, contents: dict[str, Preset]):
         logger.info(f'Saving {len(contents.keys())} presets...')
         presets_file = self.get_presets_file()
 
@@ -77,7 +79,7 @@ class FileManager:
             f.close()
         return {}
 
-    def save_preferences_file(self, preferences):
+    def save_preferences_file(self, preferences: dict[str, str]):
         logger.info(f'Saving preferences...')
         presets_file = self.get_preferences_file()
 
@@ -89,8 +91,8 @@ class FileManager:
                   indent=4, default=encoder)
         f.close()
 
-    def is_file_exists(self, file):
+    def is_file_exists(self, file: str):
         return os.path.exists(file)
 
-    def is_directory_exists(self, directory):
+    def is_directory_exists(self, directory: str):
         return os.path.isdir(directory)
