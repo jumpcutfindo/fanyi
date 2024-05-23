@@ -88,7 +88,7 @@ class Controller:
         logger.info('Capturing and processing all displays...')
         filenames = screenshot.take_full_screenshot(
             self.file_manager.get_screenshots_directory())
-        return self.__process_image(filenames)
+        return self.process_image(filenames)
 
     def on_partial_capture(self, preset: Preset):
         logger.info('Capturing and processing partial...')
@@ -104,9 +104,9 @@ class Controller:
 
         filenames = screenshot.take_partial_screenshot(
             self.file_manager.get_screenshots_directory(), settings)
-        return self.__process_image(filenames)
+        return self.process_image(filenames)
 
-    def __process_image(self, filenames: list[str]):
+    def process_image(self, filenames: list[str]):
         if not self.dictionary:
             raise ValueError('No dictionary loaded')
 

@@ -46,4 +46,8 @@ class MainFrameContainer:
 
     def on_screenshot(self, preset):
         result = self.controller.on_partial_capture(preset)
-        self.result_frame.set_results(result[0], result[1])
+        self.set_results(result)
+
+    def set_results(self, results):
+        filenames, phrases = results
+        self.result_frame.set_results(filenames, phrases)
