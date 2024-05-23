@@ -131,17 +131,20 @@ class Controller:
                 result = reader.read_simplified(filename)
 
             if result:
+                logger.info(f'Successfully read {len(result)} lines!')
                 read_text.extend(result)
             else:
                 logger.warning(
                     "OCR did not detect any text of the selected language in the image")
 
         # Break results into smaller segments
+        logger.info('Breaking lines into subphrases...')
         phrases = self.__parse_to_chinese_subphrases(read_text)
 
         mapped_phrases = {}
 
         # Map the results to their dictionary entries
+        logger.info('Mapping results to dictionary items...')
         for (phrase, subphrases) in phrases.items():
             entries = list(
                 map(lambda p: self.__map_to_dictionary_entry(p), subphrases))
