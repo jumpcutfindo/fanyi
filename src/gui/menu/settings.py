@@ -63,7 +63,7 @@ class SettingsFrameContainer:
             logger.debug('User action: No file selected for dictionary')
             return
 
-        logger.debug(f'User action: Selected dictionary {filename}')
+        logger.debug(f'User action: Selected dictionary "{filename}"')
 
         try:
             self.root.get_controller().parse_dictionary(filename)
@@ -91,7 +91,7 @@ class SettingsFrameContainer:
 
     def __on_select_language(self, language):
         self.root.get_controller().set_language(language)
-        logger.debug(f'User action: Selected language {language}')
+        logger.debug(f'User action: Selected language "{language}"')
 
     def __load_supported_languages(self):
         self.supported_languages = self.root.get_controller().get_supported_languages()

@@ -145,7 +145,7 @@ class PresetsFrameContainer:
         screenshot_control.grid(row=0, column=0, sticky=tk.NSEW)
 
     def __on_screen_selected(self, screen_name):
-        logger.debug(f'User action: Selected screen {screen_name}')
+        logger.debug(f'User action: Selected screen "{screen_name}"')
 
         screen_info = self.screen_display_to_info_map[screen_name]
         self.left_value_var.set(screen_info['left'])
@@ -168,7 +168,7 @@ class PresetsFrameContainer:
             index]
 
         logger.debug(
-            f'User action: Selected preset {self.selected_preset.name}')
+            f'User action: Selected preset "{self.selected_preset.name}"')
 
         self.preset_name_var.set(self.selected_preset.name)
         self.screen_value_var.set(
