@@ -1,5 +1,5 @@
 from files import FileManager
-from .preset import Preset
+from .model import Preset
 
 
 class PresetManager:

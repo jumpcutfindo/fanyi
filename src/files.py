@@ -2,7 +2,7 @@ import os
 import json
 from loguru import logger
 
-from presets.preset import Preset
+from presets.model import Preset
 
 
 class FileManager:
