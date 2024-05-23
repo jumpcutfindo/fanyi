@@ -56,7 +56,7 @@ class PresetsFrameContainer:
         self.preset_name_var.set("New preset")
         preset_name_input = tk.Entry(
             self.preset_config_frame, textvariable=self.preset_name_var)
-        preset_name_input.grid(row=0, column=1, sticky=tk.NSEW)
+        preset_name_input.grid(row=0, column=1, sticky=tk.EW)
 
         # Screen configuration
         screen_value_label = tk.Label(self.preset_config_frame, text="Screen:")
@@ -77,46 +77,47 @@ class PresetsFrameContainer:
         self.left_value_var = tk.IntVar(self.root.frame)
         self.left_value_var.set(0)
         left_label = tk.Label(self.dimension_values_frame, text="L:")
-        left_label.grid(row=0, column=0, padx=[0, 8], sticky=tk.NSEW)
+        left_label.grid(row=0, column=0, padx=(0, 4), sticky=tk.NSEW)
         left_value_input = tk.Entry(
             self.dimension_values_frame, textvariable=self.left_value_var, width=5)
-        left_value_input.grid(row=0, column=1, padx=8, sticky=tk.NSEW)
+        left_value_input.grid(row=0, column=1, padx=8, sticky=tk.EW)
 
         self.top_value_var = tk.IntVar(self.root.frame)
         self.top_value_var.set(0)
         top_label = tk.Label(self.dimension_values_frame, text="T:")
-        top_label.grid(row=0, column=2, padx=[0, 8], sticky=tk.NSEW)
+        top_label.grid(row=0, column=2, padx=(0, 4), sticky=tk.NSEW)
         top_value_input = tk.Entry(
             self.dimension_values_frame, textvariable=self.top_value_var, width=5)
-        top_value_input.grid(row=0, column=3, padx=8, sticky=tk.NSEW)
+        top_value_input.grid(row=0, column=3, padx=8, sticky=tk.EW)
 
         self.width_value_var = tk.IntVar(self.root.frame)
         self.width_value_var.set(0)
         width_label = tk.Label(self.dimension_values_frame, text="W:")
-        width_label.grid(row=0, column=4, padx=[0, 8], sticky=tk.NSEW)
+        width_label.grid(row=0, column=4, padx=(0, 4), sticky=tk.NSEW)
         width_value_input = tk.Entry(
             self.dimension_values_frame, textvariable=self.width_value_var, width=5)
-        width_value_input.grid(row=0, column=5, padx=8, sticky=tk.NSEW)
+        width_value_input.grid(row=0, column=5, padx=8, sticky=tk.EW)
 
         self.height_value_var = tk.IntVar(self.root.frame)
         self.height_value_var.set(0)
         height_label = tk.Label(self.dimension_values_frame, text="H:")
-        height_label.grid(row=0, column=6, padx=[0, 8], sticky=tk.NSEW)
+        height_label.grid(row=0, column=6, padx=(0, 4), sticky=tk.NSEW)
         height_value_input = tk.Entry(
             self.dimension_values_frame, textvariable=self.height_value_var, width=5)
-        height_value_input.grid(row=0, column=7, padx=8, sticky=tk.NSEW)
+        height_value_input.grid(row=0, column=7, padx=8, sticky=tk.EW)
 
         # Preset controls
         self.preset_controls_frame = tk.Frame(self.frame)
-        self.preset_controls_frame.grid(row=3, column=0, sticky=tk.EW)
+        self.preset_controls_frame.grid(row=3, column=0, sticky=tk.EW, pady=8)
+        self.preset_controls_frame.columnconfigure([0, 1, 2, 3], weight=1)
 
-        self.delete_preset_button = tk.Button(
+        delete_preset_button = tk.Button(
             self.preset_controls_frame, text="Delete", command=self.__on_delete_preset)
-        self.delete_preset_button.pack(side=tk.RIGHT, padx=8)
+        delete_preset_button.grid(row=0, column=2, padx=8, sticky=tk.EW)
 
-        self.save_preset_button = tk.Button(
+        save_preset_button = tk.Button(
             self.preset_controls_frame, text="Save", command=self.__on_save_preset)
-        self.save_preset_button.pack(side=tk.RIGHT, padx=8)
+        save_preset_button.grid(row=0, column=3, padx=8, sticky=tk.EW)
 
         # Set default screen selection
         self.screen_value_var.set(self.screen_display_names[0])

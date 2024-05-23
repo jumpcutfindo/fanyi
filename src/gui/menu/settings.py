@@ -37,7 +37,7 @@ class SettingsFrameContainer:
         dictionary_source_input.config(state='disabled')
         dictionary_source_input.bind(
             "<1>", lambda event: dictionary_source_input.focus_set())
-        dictionary_source_input.grid(row=1, column=1, sticky=tk.NSEW)
+        dictionary_source_input.grid(row=1, column=1, sticky=tk.EW)
 
         # Dictionary label and select button
         bottom_right_frame = tk.Frame(self.frame)
