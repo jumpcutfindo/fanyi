@@ -1,12 +1,17 @@
 import tkinter as tk
 from loguru import logger
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from gui.main import MainFrameContainer
+    from gui.menu.menu import MenuFrameContainer
 
 from tkinter.filedialog import askopenfilename
 
 
 class SettingsFrameContainer:
 
-    def __init__(self, root, parent):
+    def __init__(self, root: "MainFrameContainer", parent: "MenuFrameContainer"):
         self.root = root
         self.parent = parent
 

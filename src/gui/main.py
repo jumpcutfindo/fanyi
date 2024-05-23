@@ -1,5 +1,9 @@
 import tkinter as tk
 
+from controller import Controller
+from preferences import PreferenceManager
+from presets.preset_manager import PresetManager
+
 from .menu.menu import MenuFrameContainer
 from .results.result import ResultFrameContainer
 
@@ -7,7 +11,7 @@ ORIGINAL_DPI = 95
 
 
 class MainFrameContainer:
-    def __init__(self, controller, preset_manager, preference_manager):
+    def __init__(self, controller: Controller, preset_manager: PresetManager, preference_manager: PreferenceManager):
         self.controller = controller
         self.preset_manager = preset_manager
         self.preference_manager = preference_manager

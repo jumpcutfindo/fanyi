@@ -1,8 +1,12 @@
 import tkinter as tk
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from gui.results.result import ResultFrameContainer
 
 
 class TranslationsFrameContainer:
-    def __init__(self, parent):
+    def __init__(self, parent: "ResultFrameContainer"):
         self.parent = parent
 
         canvas = tk.Canvas(parent.frame)

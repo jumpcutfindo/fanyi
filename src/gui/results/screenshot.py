@@ -1,9 +1,13 @@
 import tkinter as tk
 from PIL import ImageTk, Image
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from gui.results.result import ResultFrameContainer
 
 
 class ScreenshotFrameContainer:
-    def __init__(self, parent):
+    def __init__(self, parent: "ResultFrameContainer"):
         self.parent = parent
 
         self.frame = tk.Frame(
