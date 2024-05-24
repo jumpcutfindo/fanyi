@@ -34,13 +34,25 @@ class TranslationsFrameContainer:
         self.canvas = canvas
         self.frame = scrollable_frame
 
+        self.table_widgets = []
+
     def __handle_resize(self, event):
         canvas = event.widget
         canvas.itemconfigure("canvas_frame", width=event.width)
 
         canvas.configure(scrollregion=canvas.bbox("all"))
 
+        # Adjust wraplength of definition labels
+        if self.table_widgets:
+            for label in self.table_widgets:
+                translation_frame, simplified_label, traditional_label, pinyin_label, definitions_label = label
+                wraplength = translation_frame.winfo_width() - (simplified_label.winfo_width() +
+                                                                traditional_label.winfo_width() + pinyin_label.winfo_width() + 128)
+                definitions_label.configure(wraplength=wraplength)
+
     def set_translations(self, translations):
+        self.table_widgets = []
+
         for widget in self.frame.winfo_children():
             widget.destroy()
 
@@ -101,3 +113,7 @@ class TranslationsFrameContainer:
 
                 definitions_label.grid(
                     row=index, column=3, padx=8, pady=(0, definitions_label_padding_y), sticky=tk.W)
+
+                # Add labels to list for refresh calculations
+                self.table_widgets.append(
+                    (translation_frame, simplified_label, traditional_label, pinyin_label, definitions_label))
