@@ -61,7 +61,7 @@ class Controller:
             self.parse_dictionary(saved_path)
 
     def set_language(self, language: Language | str):
-        self.language = Language(language);
+        self.language = Language(language)
 
     def get_supported_languages(self) -> dict[str, str]:
         return {lang.name: lang.value for lang in Language}
@@ -146,11 +146,9 @@ class Controller:
         # Map the results to their dictionary entries
         logger.info('Mapping results to dictionary items...')
         for (phrase, subphrases) in phrases.items():
-            entries = list(
+            xss = list(
                 map(lambda p: self.__map_to_dictionary_entry(p), subphrases))
-
-            # TODO: Handle cases where the word isn't found in the dictionary (provide pinyin?)
-            mapped_phrases[phrase] = entries
+            mapped_phrases[phrase] = [x for xs in xss for x in xs]
 
         logger.success('Successfully processed files via OCR')
         return (filenames, mapped_phrases)
@@ -186,18 +184,20 @@ class Controller:
 
         return phrases_map
 
-    def __map_to_dictionary_entry(self, phrase: str) -> DictionaryEntry | None:
+    def __map_to_dictionary_entry(self, phrase: str) -> list[DictionaryEntry | None]:
         if not self.dictionary:
             return None
-        
-        result = None
-        if self.language == Language.TRADITIONAL:
-            result = self.dictionary.find_traditional(phrase)
-        else:
-            result = self.dictionary.find_simplified(phrase)
 
-        if not result:
-            logger.warning(f'{phrase} not found :(')
+        result = []
+        finder = self.dictionary.find_traditional if self.language == Language.TRADITIONAL else self.dictionary.find_simplified
+
+        entry = finder(phrase)
+        if not entry:
+            # Unable to find the specified phrase in the dictionary
+            # Break the phrase into smaller units and search
+            result = map(lambda x: finder(x), phrase)
+        else:
+            result.append(entry)
 
         return result
 
