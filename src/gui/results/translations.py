@@ -9,9 +9,12 @@ class TranslationsFrameContainer:
     def __init__(self, parent: "ResultFrameContainer"):
         self.parent = parent
 
-        canvas = tk.Canvas(parent.frame)
+        self.frame = tk.Frame(parent.frame)
+        self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        canvas = tk.Canvas(self.frame)
         scrollbar = tk.Scrollbar(
-            parent.frame, orient="vertical", command=canvas.yview)
+            self.frame, orient="vertical", command=canvas.yview)
         scrollable_frame = tk.Frame(canvas)
 
         scrollable_frame.pack(side=tk.LEFT)
@@ -32,7 +35,7 @@ class TranslationsFrameContainer:
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         self.canvas = canvas
-        self.frame = scrollable_frame
+        self.scrollable_frame = scrollable_frame
 
         self.table_widgets = []
 
@@ -53,22 +56,22 @@ class TranslationsFrameContainer:
     def set_translations(self, translations):
         self.table_widgets = []
 
-        for widget in self.frame.winfo_children():
+        for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
 
         for index, (key, entries) in enumerate(translations.items()):
             containing_frame = tk.Frame(
-                self.frame, background='white')
+                self.scrollable_frame, background='white')
             containing_frame.pack(fill=tk.X, pady=8, padx=8, expand=True)
 
             # Sentence
             key_label = tk.Label(
-                containing_frame, text=key, font=('Microsoft Yahei', 14), background='white', justify='left', wraplength=self.frame.winfo_width() - 32)
+                containing_frame, text=key, font=('Microsoft Yahei', 14), background='white', justify='left', wraplength=self.scrollable_frame.winfo_width() - 32)
             key_label.pack(padx=8, pady=8, anchor=tk.W)
 
             # Bind sentence label to resize on window resize
             self.canvas.bind('<Configure>', lambda e: key_label.configure(
-                wraplength=self.frame.winfo_width() - 32), add=True)
+                wraplength=self.scrollable_frame.winfo_width() - 32), add=True)
 
             translation_frame = tk.Frame(
                 containing_frame, background='white')

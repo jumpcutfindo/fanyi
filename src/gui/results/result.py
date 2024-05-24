@@ -7,11 +7,12 @@ from .translations import TranslationsFrameContainer
 if TYPE_CHECKING:
     from gui.main import MainFrameContainer
 
+
 class ResultFrameContainer:
     def __init__(self, parent: "MainFrameContainer"):
         self.parent = parent
 
-        self.frame = tk.Frame(parent.frame, bd=1, relief=tk.SOLID)
+        self.frame = tk.Frame(parent.frame)
         self.frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         self.screenshot_frame = ScreenshotFrameContainer(self)

@@ -10,24 +10,37 @@ class ScreenshotFrameContainer:
     def __init__(self, parent: "ResultFrameContainer"):
         self.parent = parent
 
-        self.frame = tk.Frame(
-            self.parent.frame, bd=1, relief=tk.SOLID)
+        self.frame = tk.Frame(parent.frame, height=240)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH)
+        self.frame.grid_propagate(False)
 
-        self.screenshot_src = ""
+        self.frame.rowconfigure(0, weight=1)
+        self.frame.columnconfigure(0, weight=1)
+
+        self.frame.bind('<Configure>', self.__handle_resize)
+        self.image_label = tk.Label(
+            self.frame, text='test')
+        self.image_label.grid(sticky=tk.NSEW)
 
     def set_screenshot(self, src):
-        self.screenshot_src = src
-        self.screenshot = ImageTk.PhotoImage(Image.open(src))
+        self.screenshot = Image.open(src)
+        self.__create_resized_image()
 
-        self.__create_image_frame()
+    def __create_resized_image(self):
+        width, height = self.__get_scaled_size(
+            self.frame.winfo_width(), self.frame.winfo_height(), self.screenshot.width, self.screenshot.height)
 
-    def __create_image_frame(self):
-        for widget in self.frame.winfo_children():
-            widget.destroy()
+        self.photo_image = ImageTk.PhotoImage(
+            self.screenshot.resize(size=(width, height)))
 
-        panel = tk.Canvas(self.frame, bd=0, highlightthickness=0)
-        panel.create_image(0, 0, image=self.screenshot,
-                           anchor=tk.NW, tags="IMG")
-        panel.grid(row=0, sticky=tk.NSEW)
-        panel.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+        self.image_label.configure(image=self.photo_image)
+
+    def __handle_resize(self, event):
+        if not self.screenshot:
+            return
+
+        self.__create_resized_image()
+
+    def __get_scaled_size(self, frame_width, frame_height, width, height):
+        ratio = min(frame_width / width, frame_height / height)
+        return max(1, round(width * ratio)), max(1, round(height * ratio))
