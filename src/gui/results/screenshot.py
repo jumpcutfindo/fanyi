@@ -11,13 +11,21 @@ class ScreenshotFrameContainer:
         self.parent = parent
 
         self.frame = tk.Frame(parent.frame, height=240)
-        self.frame.pack(side=tk.TOP, fill=tk.BOTH)
+        self.frame.pack(side=tk.TOP, fill=tk.BOTH, padx=16)
         self.frame.grid_propagate(False)
 
-        self.frame.rowconfigure(0, weight=1)
+        self.frame.rowconfigure(1, weight=1)
         self.frame.columnconfigure(0, weight=1)
 
         self.frame.bind('<Configure>', self.__handle_resize)
+
+        title_frame = tk.Frame(self.frame)
+        title_frame.grid(row=0, column=0, sticky=tk.NW)
+
+        translations_label = tk.Label(
+            title_frame, text="Screenshot", justify=tk.LEFT)
+        translations_label.pack(side=tk.TOP, pady=8)
+
         self.image_label = tk.Label(
             self.frame, text='test')
         self.image_label.grid(sticky=tk.NSEW)

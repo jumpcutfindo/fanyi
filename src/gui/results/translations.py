@@ -12,6 +12,13 @@ class TranslationsFrameContainer:
         self.frame = tk.Frame(parent.frame)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
+        title_frame = tk.Frame(self.frame)
+        title_frame.pack(side=tk.TOP, anchor=tk.NW, padx=8)
+
+        translations_label = tk.Label(
+            title_frame, text="Translations", justify=tk.LEFT)
+        translations_label.pack(side=tk.TOP)
+
         canvas = tk.Canvas(self.frame)
         scrollbar = tk.Scrollbar(
             self.frame, orient="vertical", command=canvas.yview)
@@ -50,7 +57,7 @@ class TranslationsFrameContainer:
             for label in self.table_widgets:
                 translation_frame, simplified_label, traditional_label, pinyin_label, definitions_label = label
                 wraplength = translation_frame.winfo_width() - (simplified_label.winfo_width() +
-                                                                traditional_label.winfo_width() + pinyin_label.winfo_width() + 128)
+                                                                traditional_label.winfo_width() + pinyin_label.winfo_width() + 160)
                 definitions_label.configure(wraplength=wraplength)
 
     def set_translations(self, translations):
