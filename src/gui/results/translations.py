@@ -45,6 +45,7 @@ class TranslationsFrameContainer:
         self.scrollable_frame = scrollable_frame
 
         self.table_widgets = []
+        self.sentence_labels = []
 
     def __handle_resize(self, event):
         canvas = event.widget
@@ -60,8 +61,15 @@ class TranslationsFrameContainer:
                                                                 traditional_label.winfo_width() + pinyin_label.winfo_width() + 160)
                 definitions_label.configure(wraplength=wraplength)
 
+        # Adjust wraplength of sentence labels
+        if self.sentence_labels:
+            for label in self.sentence_labels:
+                label.configure(
+                    wraplength=self.scrollable_frame.winfo_width() - 32)
+
     def set_translations(self, translations):
         self.table_widgets = []
+        self.sentence_labels = []
 
         for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
@@ -72,13 +80,10 @@ class TranslationsFrameContainer:
             containing_frame.pack(fill=tk.X, pady=4, padx=8, expand=True)
 
             # Sentence
-            key_label = tk.Label(
+            sentence_label = tk.Label(
                 containing_frame, text=key, font=('Microsoft Yahei', 14), background='white', justify='left', wraplength=self.scrollable_frame.winfo_width() - 32)
-            key_label.pack(padx=8, pady=8, anchor=tk.W)
-
-            # Bind sentence label to resize on window resize
-            self.canvas.bind('<Configure>', lambda e: key_label.configure(
-                wraplength=self.scrollable_frame.winfo_width() - 32), add=True)
+            sentence_label.pack(padx=8, pady=8, anchor=tk.W)
+            self.sentence_labels.append(sentence_label)
 
             translation_frame = tk.Frame(
                 containing_frame, background='white')

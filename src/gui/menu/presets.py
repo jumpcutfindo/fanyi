@@ -23,7 +23,8 @@ class PresetsFrameContainer:
         self.frame = tk.Frame(self.parent.frame)
         self.frame.columnconfigure(0, weight=1)
         self.frame.rowconfigure(4, weight=1)
-        self.frame.pack(side=tk.TOP, fill=tk.BOTH, padx=8, pady=(8, 0), expand=True)
+        self.frame.pack(side=tk.TOP, fill=tk.BOTH,
+                        padx=8, pady=(8, 0), expand=True)
 
         presets_label = tk.Label(self.frame, text="Presets")
         presets_label.grid(row=0, column=0, sticky=tk.W)
