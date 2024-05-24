@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 class ScreenshotFrameContainer:
     def __init__(self, parent: "ResultFrameContainer"):
         self.parent = parent
+        self.screenshot = None
 
         self.frame = tk.Frame(parent.frame, height=240)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, padx=8)
