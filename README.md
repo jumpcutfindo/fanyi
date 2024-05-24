@@ -5,8 +5,10 @@ Fanyi (翻译) is a simple, optical screen reading (OCR) application that is mea
 
 It uses the [CEDICT](https://en.wikipedia.org/wiki/CEDICT) dictionary to provide definitions for Chinese phrases and words.
 
+Note: This has been developed and tested primarily on Windows systems
+
 # How it works
-The application takes a screenshot and passes it into the OCR (powered by [EasyOCR](https://github.com/JaidedAI/EasyOCR)). The text is read, then passed into [pkuseg](https://github.com/lancopku/pkuseg-python) for Chinese word segmentation. The system then tries to map it to the parsed CEDICT and produces the result.
+The application takes a screenshot and passes it into [EasyOCR](https://github.com/JaidedAI/EasyOCR). The text is read, then passed into [pkuseg](https://github.com/lancopku/pkuseg-python) for Chinese word segmentation. The system then tries to map it to the parsed CEDICT and produces the result.
 
 # Features
 - Reads text on your screen and helps to translate between Simplified and Traditional Chinese into English

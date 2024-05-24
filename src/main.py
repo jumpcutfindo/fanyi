@@ -28,10 +28,6 @@ def main():
     windll.shcore.SetProcessDpiAwareness(1)
     gui = MainFrameContainer(controller, preset_manager, preference_manager)
 
-    # TODO: Remove this for testing
-    results = controller.process_image(['.\\.cache\\screenshot.png'])
-    gui.set_results(results)
-
     gui.start()
 
 
