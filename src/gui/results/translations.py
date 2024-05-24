@@ -16,7 +16,7 @@ class TranslationsFrameContainer:
         title_frame.pack(side=tk.TOP, anchor=tk.NW, padx=8)
 
         translations_label = tk.Label(
-            title_frame, text="Translations", justify=tk.LEFT)
+            title_frame, text="Translations", justify=tk.LEFT, pady=8)
         translations_label.pack(side=tk.TOP)
 
         canvas = tk.Canvas(self.frame)
@@ -69,7 +69,7 @@ class TranslationsFrameContainer:
         for index, (key, entries) in enumerate(translations.items()):
             containing_frame = tk.Frame(
                 self.scrollable_frame, background='white')
-            containing_frame.pack(fill=tk.X, pady=8, padx=8, expand=True)
+            containing_frame.pack(fill=tk.X, pady=4, padx=8, expand=True)
 
             # Sentence
             key_label = tk.Label(

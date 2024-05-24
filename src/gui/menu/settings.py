@@ -19,10 +19,10 @@ class SettingsFrameContainer:
 
         self.frame = tk.Frame(self.parent.frame)
         self.frame.columnconfigure(1, weight=1)
-        self.frame.pack(side=tk.TOP, fill=tk.X)
+        self.frame.pack(side=tk.TOP, fill=tk.X, padx=8, pady=8)
 
         settings_label = tk.Label(self.frame, text="Settings")
-        settings_label.grid(row=0, column=0, sticky=tk.W, padx=0, pady=8)
+        settings_label.grid(row=0, column=0, sticky=tk.W)
 
         self.__dictionary_source_setting()
         self.__language_setting()
@@ -31,7 +31,7 @@ class SettingsFrameContainer:
         dictionary_source_label = tk.Label(
             self.frame, text="Dictionary:")
         dictionary_source_label.grid(
-            row=1, column=0, padx=(0, 16), pady=8, sticky=tk.W)
+            row=1, column=0, padx=(0, 16), pady=4, sticky=tk.W)
 
         # Dictionary file input
         self.dictionary_source_var = tk.StringVar(self.root.frame, "dict_src")
@@ -91,7 +91,7 @@ class SettingsFrameContainer:
         language_dropdown = tk.OptionMenu(
             self.frame, language_var, *self.supported_languages.values(), command=self.__on_select_language)
         language_dropdown.grid(
-            row=3, column=1, sticky=tk.NSEW
+            row=3, column=1, sticky=tk.EW
         )
 
     def __on_select_language(self, language):

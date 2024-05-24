@@ -23,10 +23,10 @@ class PresetsFrameContainer:
         self.frame = tk.Frame(self.parent.frame)
         self.frame.columnconfigure(0, weight=1)
         self.frame.rowconfigure(4, weight=1)
-        self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.frame.pack(side=tk.TOP, fill=tk.BOTH, padx=8, pady=(8, 0), expand=True)
 
         presets_label = tk.Label(self.frame, text="Presets")
-        presets_label.grid(row=0, column=0, pady=8, sticky=tk.W)
+        presets_label.grid(row=0, column=0, sticky=tk.W)
 
         self.__preset_config_section()
         self.__preset_list_section()
@@ -75,41 +75,64 @@ class PresetsFrameContainer:
 
         # Dimensions configuration (top, left, height, width)
         self.dimension_values_frame = tk.Frame(self.frame)
-        self.dimension_values_frame.columnconfigure([1, 3, 5, 7], weight=1)
+        self.dimension_values_frame.columnconfigure([0, 1, 2, 3], weight=1)
         self.dimension_values_frame.grid(
             row=2, column=0, pady=8, sticky=tk.NSEW)
 
+        # Dimensions - Left
         self.left_value_var = tk.IntVar(self.root.frame)
         self.left_value_var.set(0)
-        left_label = tk.Label(self.dimension_values_frame, text="L:")
-        left_label.grid(row=0, column=0, padx=(0, 4), sticky=tk.NSEW)
-        left_value_input = tk.Entry(
-            self.dimension_values_frame, textvariable=self.left_value_var, width=5)
-        left_value_input.grid(row=0, column=1, padx=8, sticky=tk.EW)
 
+        left_value_frame = tk.Frame(self.dimension_values_frame)
+        left_value_frame.grid(row=0, column=0, sticky=tk.NSEW)
+
+        left_label = tk.Label(left_value_frame, text="L:")
+        left_label.pack(side=tk.LEFT, padx=(0, 4))
+        left_value_input = tk.Entry(
+            left_value_frame, textvariable=self.left_value_var)
+        left_value_input.pack(side=tk.LEFT, expand=True)
+
+        # Dimensions - Top
         self.top_value_var = tk.IntVar(self.root.frame)
         self.top_value_var.set(0)
-        top_label = tk.Label(self.dimension_values_frame, text="T:")
-        top_label.grid(row=0, column=2, padx=(0, 4), sticky=tk.NSEW)
-        top_value_input = tk.Entry(
-            self.dimension_values_frame, textvariable=self.top_value_var, width=5)
-        top_value_input.grid(row=0, column=3, padx=8, sticky=tk.EW)
 
+        top_value_frame = tk.Frame(self.dimension_values_frame)
+        top_value_frame.grid(row=0, column=1, sticky=tk.NSEW)
+
+        top_label = tk.Label(top_value_frame, text="T:")
+        top_label.pack(side=tk.LEFT, padx=(0, 4))
+
+        top_value_input = tk.Entry(
+            top_value_frame, textvariable=self.top_value_var)
+        top_value_input.pack(side=tk.LEFT, expand=True)
+
+        # Dimensions - Width
         self.width_value_var = tk.IntVar(self.root.frame)
         self.width_value_var.set(0)
-        width_label = tk.Label(self.dimension_values_frame, text="W:")
-        width_label.grid(row=0, column=4, padx=(0, 4), sticky=tk.NSEW)
-        width_value_input = tk.Entry(
-            self.dimension_values_frame, textvariable=self.width_value_var, width=5)
-        width_value_input.grid(row=0, column=5, padx=8, sticky=tk.EW)
 
+        width_frame = tk.Frame(self.dimension_values_frame)
+        width_frame.grid(row=0, column=2, sticky=tk.NSEW)
+
+        width_label = tk.Label(width_frame, text="W:")
+        width_label.pack(side=tk.LEFT, padx=(0, 4))
+
+        width_value_input = tk.Entry(
+            width_frame, textvariable=self.width_value_var)
+        width_value_input.pack(side=tk.LEFT, expand=True)
+
+        # Dimensions - Height
         self.height_value_var = tk.IntVar(self.root.frame)
         self.height_value_var.set(0)
-        height_label = tk.Label(self.dimension_values_frame, text="H:")
-        height_label.grid(row=0, column=6, padx=(0, 4), sticky=tk.NSEW)
+
+        height_frame = tk.Frame(self.dimension_values_frame)
+        height_frame.grid(row=0, column=3, sticky=tk.NSEW)
+
+        height_label = tk.Label(height_frame, text="H:")
+        height_label.pack(side=tk.LEFT, padx=(0, 4))
+
         height_value_input = tk.Entry(
-            self.dimension_values_frame, textvariable=self.height_value_var, width=5)
-        height_value_input.grid(row=0, column=7, padx=8, sticky=tk.EW)
+            height_frame, textvariable=self.height_value_var)
+        height_value_input.pack(side=tk.LEFT, expand=True)
 
         # Preset controls
         self.preset_controls_frame = tk.Frame(self.frame)
@@ -118,11 +141,11 @@ class PresetsFrameContainer:
 
         delete_preset_button = tk.Button(
             self.preset_controls_frame, text="Delete", command=self.__on_delete_preset)
-        delete_preset_button.grid(row=0, column=2, padx=8, sticky=tk.EW)
+        delete_preset_button.grid(row=0, column=2, sticky=tk.EW, padx=8)
 
         save_preset_button = tk.Button(
             self.preset_controls_frame, text="Save", command=self.__on_save_preset)
-        save_preset_button.grid(row=0, column=3, padx=8, sticky=tk.EW)
+        save_preset_button.grid(row=0, column=3, sticky=tk.EW)
 
         # Set default screen selection
         self.screen_value_var.set(self.screen_display_names[0])

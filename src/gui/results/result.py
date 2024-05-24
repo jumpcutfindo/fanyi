@@ -18,7 +18,7 @@ class ResultFrameContainer:
         self.screenshot_frame = ScreenshotFrameContainer(self)
 
         sep = tk.Frame(self.frame, height=2, bd=1, relief='sunken')
-        sep.pack(side=tk.TOP, fill=tk.X, padx=8, pady=16)
+        sep.pack(side=tk.TOP, fill=tk.X)
 
         self.translation_frame = TranslationsFrameContainer(self)
 

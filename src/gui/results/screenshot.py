@@ -11,7 +11,7 @@ class ScreenshotFrameContainer:
         self.parent = parent
 
         self.frame = tk.Frame(parent.frame, height=240)
-        self.frame.pack(side=tk.TOP, fill=tk.BOTH, padx=16)
+        self.frame.pack(side=tk.TOP, fill=tk.BOTH, padx=8)
         self.frame.grid_propagate(False)
 
         self.frame.rowconfigure(1, weight=1)

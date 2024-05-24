@@ -24,10 +24,14 @@ class MainFrameContainer:
         self.root.geometry(
             f"{self.scaled(800, self.scale)}x{self.scaled(600, self.scale)}")
 
-        self.frame = tk.Frame(self.root, bd=1, relief=tk.SOLID)
+        self.frame = tk.Frame(self.root)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
         self.menu_frame = MenuFrameContainer(self)
+
+        sep = tk.Frame(self.frame, width=2, bd=1, relief='sunken')
+        sep.pack(side=tk.LEFT, fill=tk.Y)
+
         self.result_frame = ResultFrameContainer(self)
 
     def start(self):
