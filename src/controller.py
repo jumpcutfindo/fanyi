@@ -95,40 +95,39 @@ class Controller:
             "mon": preset.screen,
         }
 
-        filenames = screenshot.take_partial_screenshot(
+        filename = screenshot.take_partial_screenshot(
             self.file_manager.get_screenshots_directory(), settings)
-        return filenames
+        return filename
 
-    def process_image(self, filenames: list[str]):
+    def process_image(self, filename: str):
         if not self.dictionary:
             raise ValueError('No dictionary loaded')
 
-        if not filenames:
+        if not filename:
             raise ValueError('No filenames provided')
 
         logger.info('Received {} files for processing, sending to OCR...'.format(
-            len(filenames)))
+            len(filename)))
 
         read_text = []
 
         # Send file(s) for processing, adding to results
-        for filename in filenames:
-            logger.info('Processing file: {}'.format(filename))
+        logger.info('Processing file: {}'.format(filename))
 
-            result = None
+        result = None
 
-            # Process depending on the type of language the controller is set to
-            if self.language == Language.TRADITIONAL:
-                result = reader.read_traditional(filename)
-            else:
-                result = reader.read_simplified(filename)
+        # Process depending on the type of language the controller is set to
+        if self.language == Language.TRADITIONAL:
+            result = reader.read_traditional(filename)
+        else:
+            result = reader.read_simplified(filename)
 
-            if result:
-                logger.info(f'Successfully read {len(result)} lines!')
-                read_text.extend(result)
-            else:
-                logger.warning(
-                    "OCR did not detect any text of the selected language in the image")
+        if result:
+            logger.info(f'Successfully read {len(result)} lines!')
+            read_text.extend(result)
+        else:
+            logger.warning(
+                "OCR did not detect any text of the selected language in the image")
 
         # Break results into smaller segments
         logger.info('Breaking lines into subphrases...')
@@ -144,7 +143,7 @@ class Controller:
             mapped_phrases[phrase] = [x for xs in xss for x in xs]
 
         logger.success('Successfully processed files via OCR')
-        return (filenames, mapped_phrases)
+        return (filename, mapped_phrases)
 
     def __remove_non_chinese_items(self, items: list[str]) -> list[str]:
         """Removes any items that do not contain Chinese from the results"""

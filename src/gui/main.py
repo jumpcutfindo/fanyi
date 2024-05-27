@@ -51,6 +51,10 @@ class MainFrameContainer:
 
     def get_preference_manager(self):
         return self.preference_manager
+    
+    def on_screenshot(self, preset):
+        screenshots = self.controller.on_partial_capture(preset)
+        return screenshots
 
     def on_screenshot_and_process(self, preset):
         screenshots = self.controller.on_partial_capture(preset)
@@ -58,5 +62,5 @@ class MainFrameContainer:
         self.set_results(result)
 
     def set_results(self, results):
-        filenames, phrases = results
-        self.result_frame.set_results(filenames, phrases)
+        filename, phrases = results
+        self.result_frame.set_results(filename, phrases)
