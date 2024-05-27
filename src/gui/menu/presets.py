@@ -73,7 +73,7 @@ class PresetsFrameContainer:
 
         self.screen_value_var = tk.StringVar(self.root.frame)
         screen_dropdown = tk.OptionMenu(self.preset_config_frame, self.screen_value_var,
-                                        *self.screen_display_names, command=self.__on_screen_selected)
+                                        *self.screen_display_names, command=lambda w : self.__on_screen_selected(w, True))
         screen_dropdown.grid(row=1, column=1, sticky=tk.NSEW, pady=8)
 
         # Dimensions configuration (top, left, height, width)
@@ -157,7 +157,7 @@ class PresetsFrameContainer:
 
         # Set default screen selection
         self.screen_value_var.set(self.screen_display_names[0])
-        self.__on_screen_selected(self.screen_value_var.get())
+        self.__on_screen_selected(self.screen_value_var.get(), False)
 
     def __preset_list_section(self):
         self.preset_list_frame = tk.Frame(self.frame)
@@ -180,8 +180,9 @@ class PresetsFrameContainer:
             self.preset_controls_frame, text="Screenshot", command=self.__on_screenshot_and_process)
         screenshot_control.grid(row=0, column=0, sticky=tk.NSEW)
 
-    def __on_screen_selected(self, screen_name):
-        logger.debug(f'User action: Selected screen "{screen_name}"')
+    def __on_screen_selected(self, screen_name, is_user_input: bool):
+        if is_user_input:
+            logger.debug(f'User action: Selected screen "{screen_name}"')
 
         screen_info = self.screen_display_to_info_map[screen_name]
         self.left_value_var.set(screen_info['left'])
