@@ -93,7 +93,7 @@ class TranslationsFrameContainer:
 
             if not entries or len(entries) == 0:
                 not_exists_label = tk.Label(
-                    translation_frame, text='No words found', font='Microsoft Yahei 10 italic', background='white')
+                    translation_frame, text='No words found', font=('Microsoft Yahei', 10, 'italic'), background='white')
                 not_exists_label.grid(
                     row=0, column=0, padx=8, pady=8, sticky=tk.W)
                 continue

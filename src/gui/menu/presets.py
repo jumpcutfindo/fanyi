@@ -199,6 +199,10 @@ class PresetsFrameContainer:
 
     def __on_select_preset(self, event):
         w = event.widget
+
+        if not w.curselection():
+            return
+
         index = int(w.curselection()[0])
         self.selected_preset = self.root.get_preset_manager().list_presets()[
             index]
