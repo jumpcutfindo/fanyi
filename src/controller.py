@@ -97,7 +97,7 @@ class Controller:
 
         filenames = screenshot.take_partial_screenshot(
             self.file_manager.get_screenshots_directory(), settings)
-        return self.process_image(filenames)
+        return filenames
 
     def process_image(self, filenames: list[str]):
         if not self.dictionary:

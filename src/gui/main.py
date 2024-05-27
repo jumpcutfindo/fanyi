@@ -52,8 +52,9 @@ class MainFrameContainer:
     def get_preference_manager(self):
         return self.preference_manager
 
-    def on_screenshot(self, preset):
-        result = self.controller.on_partial_capture(preset)
+    def on_screenshot_and_process(self, preset):
+        screenshots = self.controller.on_partial_capture(preset)
+        result = self.controller.process_image(screenshots)
         self.set_results(result)
 
     def set_results(self, results):
