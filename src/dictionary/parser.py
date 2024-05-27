@@ -2,7 +2,9 @@ import re
 from typing import List
 from loguru import logger
 
-from .model import Dictionary, DictionaryEntry
+from .dictionary import DictionaryEntry
+
+from .dictionary import Dictionary
 
 
 def __read_file(file_name: str) -> str:

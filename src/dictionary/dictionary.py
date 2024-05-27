@@ -1,10 +1,4 @@
-from enum import Enum
 from typing import List
-
-
-class Language(Enum):
-    SIMPLIFIED = 'Simplified Chinese'
-    TRADITIONAL = 'Traditional Chinese'
 
 
 class DictionaryEntry:

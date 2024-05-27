@@ -4,7 +4,8 @@ import pkuseg
 from loguru import logger
 
 from dictionary import parser
-from dictionary.model import Dictionary, DictionaryEntry, Language
+from dictionary.dictionary import Dictionary, DictionaryEntry
+from dictionary.language import Language
 from files import FileManager
 from preferences import PreferenceManager
 from presets.preset_manager import Preset
