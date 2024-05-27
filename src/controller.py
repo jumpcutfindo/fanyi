@@ -6,8 +6,8 @@ from loguru import logger
 from dictionary import Dictionary, DictionaryEntry, Language, parse
 from files import FileManager
 from preferences import PreferenceManager
-from presets.preset_manager import Preset
-from screen import screenshot, reader
+from presets import Preset
+from screen import reader, screenshot
 from input.listener import InputListener
 
 
@@ -82,12 +82,6 @@ class Controller:
             'show_monitor_info', '<ctrl>+<alt>+m', lambda: self.on_show_monitor_info())
 
         logger.info("Registered {} hotkeys".format(len(self.hotkeys)))
-
-    def on_full_capture(self):
-        logger.info('Capturing and processing all displays...')
-        filenames = screenshot.take_full_screenshot(
-            self.file_manager.get_screenshots_directory())
-        return self.process_image(filenames)
 
     def on_partial_capture(self, preset: Preset):
         logger.info('Capturing and processing partial...')

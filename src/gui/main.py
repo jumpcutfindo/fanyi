@@ -2,7 +2,7 @@ import tkinter as tk
 
 from controller import Controller
 from preferences import PreferenceManager
-from presets.preset_manager import PresetManager
+from presets import PresetManager
 
 from .menu.menu import MenuFrameContainer
 from .results.result import ResultFrameContainer

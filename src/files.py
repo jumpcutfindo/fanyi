@@ -2,9 +2,6 @@ import os
 import json
 from loguru import logger
 
-from presets.model import Preset
-
-
 class FileManager:
     def __init__(self):
         local_dir = self.get_local_directory()
@@ -52,7 +49,7 @@ class FileManager:
             f.close()
         return {}
 
-    def save_presets_file(self, contents: dict[str, Preset]):
+    def save_presets_file(self, contents: dict):
         logger.info(f'Saving {len(contents.keys())} presets...')
         presets_file = self.get_presets_file()
 

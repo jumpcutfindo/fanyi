@@ -4,11 +4,11 @@ import sys
 from loguru import logger
 
 from controller import Controller
-from presets.preset_manager import PresetManager
+from presets import PresetManager
 from files import FileManager
 from preferences import PreferenceManager
 
-from gui.main import MainFrameContainer
+from gui import MainFrameContainer
 
 
 def main():
