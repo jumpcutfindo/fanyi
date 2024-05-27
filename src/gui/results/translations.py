@@ -2,7 +2,7 @@ import tkinter as tk
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from gui.results.result import ResultFrameContainer
+    from gui.results import ResultFrameContainer
 
 
 class TranslationsFrameContainer:

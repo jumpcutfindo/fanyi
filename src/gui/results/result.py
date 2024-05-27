@@ -5,7 +5,7 @@ from .screenshot import ScreenshotFrameContainer
 from .translations import TranslationsFrameContainer
 
 if TYPE_CHECKING:
-    from gui.main import MainFrameContainer
+    from gui import MainFrameContainer
 
 
 class ResultFrameContainer:

@@ -4,8 +4,8 @@ from controller import Controller
 from preferences import PreferenceManager
 from presets import PresetManager
 
-from .menu.menu import MenuFrameContainer
-from .results.result import ResultFrameContainer
+from .menu import MenuFrameContainer
+from .results import ResultFrameContainer
 
 ORIGINAL_DPI = 95
 

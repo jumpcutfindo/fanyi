@@ -3,8 +3,8 @@ from loguru import logger
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from gui.main import MainFrameContainer
-    from gui.menu.menu import MenuFrameContainer
+    from gui import MainFrameContainer
+    from gui.menu import MenuFrameContainer
 
 from screen import screenshot
 

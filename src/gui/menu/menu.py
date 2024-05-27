@@ -5,7 +5,7 @@ from .settings import SettingsFrameContainer
 from .presets import PresetsFrameContainer
 
 if TYPE_CHECKING:
-    from gui.main import MainFrameContainer
+    from gui import MainFrameContainer
 
 
 class MenuFrameContainer:

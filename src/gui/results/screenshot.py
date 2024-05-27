@@ -3,7 +3,7 @@ from PIL import ImageTk, Image
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from gui.results.result import ResultFrameContainer
+    from gui.results import ResultFrameContainer
 
 
 class ScreenshotFrameContainer:
@@ -33,9 +33,12 @@ class ScreenshotFrameContainer:
 
     def set_screenshot(self, src):
         self.screenshot = Image.open(src)
-        self.__create_resized_image()
+        self.__configure_resized_image()
 
-    def __create_resized_image(self):
+    def __configure_resized_image(self):
+        if not self.screenshot:
+            return
+
         width, height = self.__get_scaled_size(
             self.frame.winfo_width(), self.frame.winfo_height(), self.screenshot.width, self.screenshot.height)
 
@@ -48,7 +51,7 @@ class ScreenshotFrameContainer:
         if not self.screenshot:
             return
 
-        self.__create_resized_image()
+        self.__configure_resized_image()
 
     def __get_scaled_size(self, frame_width, frame_height, width, height):
         ratio = min(frame_width / width, frame_height / height)

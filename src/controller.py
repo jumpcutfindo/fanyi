@@ -8,7 +8,7 @@ from files import FileManager
 from preferences import PreferenceManager
 from presets import Preset
 from screen import reader, screenshot
-from input.listener import InputListener
+from input import InputListener
 
 
 class Controller:
