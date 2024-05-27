@@ -3,9 +3,7 @@ from typing import Callable, cast
 import pkuseg
 from loguru import logger
 
-from dictionary import parser
-from dictionary.dictionary import Dictionary, DictionaryEntry
-from dictionary.language import Language
+from dictionary import Dictionary, DictionaryEntry, Language, parse
 from files import FileManager
 from preferences import PreferenceManager
 from presets.preset_manager import Preset
@@ -38,7 +36,7 @@ class Controller:
             logger.error(f'Specified dictionary file "{path}" does not exist!')
 
         try:
-            self.dictionary = parser.parse(path)
+            self.dictionary = parse(path)
 
             # Save the path if parsing was successful
             self.preference_manager.save_preference('dictionaryPath', path)
@@ -187,7 +185,7 @@ class Controller:
 
     def __map_to_dictionary_entry(self, phrase: str) -> list[DictionaryEntry | None]:
         if not self.dictionary:
-            return None
+            return []
 
         result = []
         finder = self.dictionary.find_traditional if self.language == Language.TRADITIONAL else self.dictionary.find_simplified
@@ -196,7 +194,7 @@ class Controller:
         if not entry:
             # Unable to find the specified phrase in the dictionary
             # Break the phrase into smaller units and search
-            result = map(lambda x: finder(x), phrase)
+            result = list(map(lambda x: finder(x), phrase))
         else:
             result.append(entry)
 
