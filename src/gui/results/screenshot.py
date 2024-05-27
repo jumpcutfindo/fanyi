@@ -34,8 +34,7 @@ class ScreenshotFrameContainer:
             title_frame, text="Screenshot", justify=tk.LEFT)
         self.translations_label.pack(side=tk.TOP, pady=8)
 
-        self.image_label = tk.Label(
-            self.frame)
+        self.image_label = tk.Label(self.frame, cursor='hand1')
         self.image_label.grid(sticky=tk.NSEW)
 
     def set_screenshot(self, preset, src):
