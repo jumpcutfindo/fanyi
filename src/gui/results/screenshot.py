@@ -5,10 +5,13 @@ from typing import TYPE_CHECKING
 from gui.utils import get_scaled_size
 
 if TYPE_CHECKING:
+    from gui import MainFrameContainer
     from gui.results import ResultFrameContainer
 
 
-class ScreenshotFrameContainer:
+class ScreenshotFrameContainer: 
+    def __init__(self, root: "MainFrameContainer", parent: "ResultFrameContainer"):
+        self.root = root
     def __init__(self, parent: "ResultFrameContainer"):
         self.parent = parent
         self.screenshot = None
