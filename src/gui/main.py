@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from controller import Controller
+from gui.preview import PreviewFrameContainer
 from preferences import PreferenceManager
 from presets import PresetManager
 
@@ -65,3 +66,6 @@ class MainFrameContainer:
         filename, phrases = result
         self.result_frame.set_results(preset, filename, phrases)
 
+    def show_screenshot_preview(self, title: str, screenshot_file: str):
+        preview_frame = PreviewFrameContainer(self, title, screenshot_file)
+        preview_frame.show()
