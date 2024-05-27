@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from gui import MainFrameContainer
     from gui.menu import MenuFrameContainer
 
+from gui.preview import PreviewFrameContainer
 from screen import screenshot
 
 
@@ -240,21 +241,10 @@ class PresetsFrameContainer:
     def __on_preview_preset(self):
         current_preset = self.__get_preset_with_current_settings()
         screenshot_file = self.__get_current_preview()
+        title = f'{screenshot_file} (L: {current_preset.left}; T: {current_preset.top}; W: {current_preset.width}; H: {current_preset.height})'
 
-        window = tk.Toplevel()
-        window.geometry(f'{self.root.scaled(800)}x{self.root.scaled(600)}')
-        window.title(f'{screenshot_file} (L: {current_preset.left}; T: {current_preset.top}; W: {current_preset.width}; H: {current_preset.height})')
-
-        frame = tk.Frame(window)
-        frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-        frame.columnconfigure(0, weight=1)
-        frame.rowconfigure(0, weight=1)
-        
-        image = ImageTk.PhotoImage(file=screenshot_file)
-        image_label = tk.Label(frame, image=image)
-        image_label.grid(row=0, column=0, sticky=tk.NSEW)
-        
-        window.mainloop()
+        preview_frame = PreviewFrameContainer(self.root, title, screenshot_file)
+        preview_frame.show()
 
     def __list_presets(self):
         return self.root.get_preset_manager().list_presets()
