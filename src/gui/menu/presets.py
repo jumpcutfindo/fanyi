@@ -243,8 +243,7 @@ class PresetsFrameContainer:
         screenshot_file = self.__get_current_preview()
         title = f'{screenshot_file} (L: {current_preset.left}; T: {current_preset.top}; W: {current_preset.width}; H: {current_preset.height})'
 
-        preview_frame = PreviewFrameContainer(self.root, title, screenshot_file)
-        preview_frame.show()
+        self.root.show_screenshot_preview(title, screenshot_file)
 
     def __list_presets(self):
         return self.root.get_preset_manager().list_presets()
