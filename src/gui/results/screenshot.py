@@ -2,6 +2,8 @@ import tkinter as tk
 from PIL import ImageTk, Image
 from typing import TYPE_CHECKING
 
+from gui.utils import get_scaled_size
+
 if TYPE_CHECKING:
     from gui.results import ResultFrameContainer
 
@@ -39,7 +41,7 @@ class ScreenshotFrameContainer:
         if not self.screenshot:
             return
 
-        width, height = self.__get_scaled_size(
+        width, height = get_scaled_size(
             self.frame.winfo_width(), self.frame.winfo_height(), self.screenshot.width, self.screenshot.height)
 
         self.photo_image = ImageTk.PhotoImage(
@@ -53,6 +55,4 @@ class ScreenshotFrameContainer:
 
         self.__configure_resized_image()
 
-    def __get_scaled_size(self, frame_width, frame_height, width, height):
-        ratio = min(frame_width / width, frame_height / height)
-        return max(1, round(width * ratio)), max(1, round(height * ratio))
+    
