@@ -22,7 +22,7 @@ class MainFrameContainer:
         # Scale according to current DPI
         self.scale = self.get_dpi() / ORIGINAL_DPI
         self.root.geometry(
-            f"{self.scaled(800, self.scale)}x{self.scaled(600, self.scale)}")
+            f"{self.scaled(800)}x{self.scaled(600)}")
 
         self.frame = tk.Frame(self.root)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -40,8 +40,8 @@ class MainFrameContainer:
     def get_dpi(self):
         return self.root.winfo_fpixels('1i')
 
-    def scaled(self, width, scale):
-        return round(width * scale)
+    def scaled(self, width):
+        return round(width * self.scale)
 
     def get_controller(self):
         return self.controller
