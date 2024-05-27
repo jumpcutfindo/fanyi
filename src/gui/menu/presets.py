@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import ImageTk
 from loguru import logger
 from typing import TYPE_CHECKING
 
@@ -175,7 +176,7 @@ class PresetsFrameContainer:
         self.preset_controls_frame.grid_columnconfigure(0, weight=1)
 
         screenshot_control = tk.Button(
-            self.preset_controls_frame, text="Screenshot", command=self.__on_screenshot)
+            self.preset_controls_frame, text="Screenshot", command=self.__on_screenshot_and_process)
         screenshot_control.grid(row=0, column=0, sticky=tk.NSEW)
 
     def __on_screen_selected(self, screen_name):
@@ -237,8 +238,23 @@ class PresetsFrameContainer:
         self.__load_presets_into_listbox()
 
     def __on_preview_preset(self):
-        # TODO: Implement preview feature
-        pass
+        current_preset = self.__get_preset_with_current_settings()
+        screenshot_file = self.__get_current_preview()
+
+        window = tk.Toplevel()
+        window.geometry(f'{self.root.scaled(800)}x{self.root.scaled(600)}')
+        window.title(f'{screenshot_file} (L: {current_preset.left}; T: {current_preset.top}; W: {current_preset.width}; H: {current_preset.height})')
+
+        frame = tk.Frame(window)
+        frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        frame.columnconfigure(0, weight=1)
+        frame.rowconfigure(0, weight=1)
+        
+        image = ImageTk.PhotoImage(file=screenshot_file)
+        image_label = tk.Label(frame, image=image)
+        image_label.grid(row=0, column=0, sticky=tk.NSEW)
+        
+        window.mainloop()
 
     def __list_presets(self):
         return self.root.get_preset_manager().list_presets()
@@ -256,7 +272,11 @@ class PresetsFrameContainer:
             width=self.width_value_var.get(),
             height=self.height_value_var.get()
         )
+    
+    def __get_current_preview(self):
+        current_preset = self.__get_preset_with_current_settings()
+        return self.root.on_screenshot(current_preset)
 
-    def __on_screenshot(self):
+    def __on_screenshot_and_process(self):
         current_preset = self.__get_preset_with_current_settings()
         self.root.on_screenshot_and_process(current_preset)
