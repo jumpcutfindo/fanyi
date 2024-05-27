@@ -140,9 +140,14 @@ class PresetsFrameContainer:
         self.preset_controls_frame.grid(row=3, column=0, sticky=tk.EW, pady=8)
         self.preset_controls_frame.columnconfigure([0, 1, 2, 3], weight=1)
 
+        preview_button = tk.Button(
+            self.preset_controls_frame, text="Preview", command=self.__on_preview_preset
+        )
+        preview_button.grid(row=0, column=0, sticky=tk.EW, padx=(0, 8))
+
         delete_preset_button = tk.Button(
             self.preset_controls_frame, text="Delete", command=self.__on_delete_preset)
-        delete_preset_button.grid(row=0, column=2, sticky=tk.EW, padx=8)
+        delete_preset_button.grid(row=0, column=2, sticky=tk.EW, padx=(0, 8))
 
         save_preset_button = tk.Button(
             self.preset_controls_frame, text="Save", command=self.__on_save_preset)
@@ -230,6 +235,10 @@ class PresetsFrameContainer:
         logger.debug(f'User action: Deleted preset {preset_name}')
 
         self.__load_presets_into_listbox()
+
+    def __on_preview_preset(self):
+        # TODO: Implement preview feature
+        pass
 
     def __list_presets(self):
         return self.root.get_preset_manager().list_presets()
