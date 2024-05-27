@@ -12,8 +12,10 @@ if TYPE_CHECKING:
 class ScreenshotFrameContainer: 
     def __init__(self, root: "MainFrameContainer", parent: "ResultFrameContainer"):
         self.root = root
-    def __init__(self, parent: "ResultFrameContainer"):
         self.parent = parent
+
+        self.preset = None
+        self.screenshot_src = None
         self.screenshot = None
 
         self.frame = tk.Frame(parent.frame, height=240)
@@ -28,16 +30,22 @@ class ScreenshotFrameContainer:
         title_frame = tk.Frame(self.frame)
         title_frame.grid(row=0, column=0, sticky=tk.NW)
 
-        translations_label = tk.Label(
+        self.translations_label = tk.Label(
             title_frame, text="Screenshot", justify=tk.LEFT)
-        translations_label.pack(side=tk.TOP, pady=8)
+        self.translations_label.pack(side=tk.TOP, pady=8)
 
         self.image_label = tk.Label(
             self.frame)
         self.image_label.grid(sticky=tk.NSEW)
 
-    def set_screenshot(self, src):
+    def set_screenshot(self, preset, src):
+        self.preset = preset
+        self.screenshot_src = src
         self.screenshot = Image.open(src)
+
+        # Set the label to include preset name
+        self.translations_label.configure(text=f'Screenshot ({self.preset.name})')
+        
         self.__configure_resized_image()
 
     def __configure_resized_image(self):
@@ -51,6 +59,7 @@ class ScreenshotFrameContainer:
             self.screenshot.resize(size=(width, height)))
 
         self.image_label.configure(image=self.photo_image)
+        self.image_label.bind("<Button-1>", self.__open_image_preview)
 
     def __handle_resize(self, event):
         if not self.screenshot:
@@ -58,4 +67,9 @@ class ScreenshotFrameContainer:
 
         self.__configure_resized_image()
 
-    
+    def __open_image_preview(self, event):
+        if not self.preset or not self.screenshot or not self.screenshot_src:
+            return
+        
+        title = f'{self.screenshot_src} (L: {self.preset.left}; T: {self.preset.top}; W: {self.preset.width}; H: {self.preset.height})'
+        self.root.show_screenshot_preview(title, self.screenshot_src)
