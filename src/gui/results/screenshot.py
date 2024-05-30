@@ -72,8 +72,12 @@ class ScreenshotFrameContainer:
         self.__configure_resized_image()
 
     def __open_image_preview(self, event):
-        if not self.preset or not self.screenshot or not self.screenshot_src:
+        if not self.screenshot or not self.screenshot_src:
             return
         
-        title = f'{self.screenshot_src} (L: {self.preset.left}; T: {self.preset.top}; W: {self.preset.width}; H: {self.preset.height})'
+        if not self.preset:
+            title = f'{self.screenshot_src} (No preset used)'
+        else:
+            title = f'{self.screenshot_src} (L: {self.preset.left}; T: {self.preset.top}; W: {self.preset.width}; H: {self.preset.height})'
+
         self.root.show_screenshot_preview(title, self.screenshot_src)
