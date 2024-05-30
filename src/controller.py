@@ -25,7 +25,7 @@ class Controller:
 
         self.__try_load_dictionary()
 
-    def start(self):
+    def start_input_listener(self):
         logger.info("Starting controller...")
         self.input_listener.start()
 

@@ -7,10 +7,9 @@ class InputListener:
         self.hotkeys = []
 
     def start(self):
-        with keyboard.GlobalHotKeys(
-                {x[1]: x[2] for x in self.hotkeys}) as h:
-            self.listener = h
-            h.join()
+        self.listener = keyboard.GlobalHotKeys(
+            {x[1]: x[2] for x in self.hotkeys})
+        self.listener.start()
 
     def stop(self):
         keyboard.Listener.stop(self.listener)

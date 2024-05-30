@@ -24,6 +24,9 @@ def main():
     preference_manager = PreferenceManager(file_manager)
     controller = Controller(file_manager, preference_manager)
 
+    # Start key listeners
+    controller.start_input_listener()
+
     # Setup GUI stuff
     windll.shcore.SetProcessDpiAwareness(1)
     gui = MainFrameContainer(controller, preset_manager, preference_manager)
