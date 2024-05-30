@@ -85,4 +85,8 @@ class ScreenshotFrameContainer:
 
     def __on_select_file(self):
         filename = askopenfilename()
+
+        if not filename:
+            return
+
         self.root.on_process(filename)
