@@ -3,7 +3,7 @@ from typing import Callable, cast
 import pkuseg
 from loguru import logger
 
-from dictionary import Dictionary, DictionaryEntry, Language, parse
+from dictionary import Dictionary, DictionaryEntry, Language, parse, segment_into_subphrases
 from files import FileManager
 from preferences import PreferenceManager
 from presets import Preset
@@ -127,8 +127,8 @@ class Controller:
                 "OCR did not detect any text of the selected language in the image")
 
         # Break results into smaller segments
-        logger.info('Breaking lines into subphrases...')
-        phrases = self.__parse_to_chinese_subphrases(read_text)
+        logger.info('Segmenting lines into subphrases...')
+        phrases = segment_into_subphrases(read_text)
 
         mapped_phrases = {}
 
@@ -141,37 +141,6 @@ class Controller:
 
         logger.success('Successfully processed files via OCR')
         return (filename, mapped_phrases)
-
-    def __remove_non_chinese_items(self, items: list[str]) -> list[str]:
-        """Removes any items that do not contain Chinese from the results"""
-        return list(filter(lambda x: re.match(r'[^A-Za-z\d\s]+', x), items))
-
-    def __clean_words(self, items: list[str]) -> list[str]:
-        """Removes items that are considered unclean, and removes symbols from words"""
-        results = []
-        for item in items:
-            results.append(re.sub(r'[^\w\s]', '', item))
-
-        results = list(filter(lambda x: re.match(r'\S', x), results))
-        return results
-
-    def __parse_to_chinese_subphrases(self, phrases) -> dict[str, list[str]]:
-        """
-        Parses a list of phrases into smaller units.
-
-        Uses `pkuseg` to help with the segmentation.
-        """
-        segmenter = pkuseg.pkuseg()
-        phrases = self.__remove_non_chinese_items(phrases)
-
-        phrases_map = {}
-
-        for phrase in phrases:
-            subphrases = cast(list[str], segmenter.cut(phrase))
-            subphrases = self.__remove_non_chinese_items(subphrases)
-            phrases_map[phrase] = self.__clean_words(subphrases)
-
-        return phrases_map
 
     def __map_to_dictionary_entry(self, phrase: str) -> list[DictionaryEntry | None]:
         if not self.dictionary:
