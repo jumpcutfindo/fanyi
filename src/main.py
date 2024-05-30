@@ -1,15 +1,15 @@
 from ctypes import windll
 
+import smokesignal
 import sys
 from loguru import logger
 
 from controller import Controller
-from presets import PresetManager
+from presets import Preset, PresetManager
 from files import FileManager
 from preferences import PreferenceManager
 
 from gui import MainFrameContainer
-
 
 def main():
     # Setup logger version
@@ -29,9 +29,15 @@ def main():
 
     # Setup GUI stuff
     windll.shcore.SetProcessDpiAwareness(1)
+    global gui
     gui = MainFrameContainer(controller, preset_manager, preference_manager)
 
     gui.start()
+
+@smokesignal.on('update_translation_results')
+def update_translation_results(preset: Preset, result):
+    if gui:
+        gui.set_results(preset, result)    
 
 if __name__ == "__main__":
     main()

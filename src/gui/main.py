@@ -1,4 +1,5 @@
 import tkinter as tk
+import smokesignal
 
 from controller import Controller
 from gui.preview import PreviewFrameContainer

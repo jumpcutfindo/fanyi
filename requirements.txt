@@ -3,3 +3,4 @@ easyocr==1.7.1
 pynput==1.7.6
 pkuseg==0.0.25
 loguru==0.7.2
+smokesignal==0.7.0

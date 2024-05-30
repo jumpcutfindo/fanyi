@@ -1,6 +1,5 @@
-import re
-from typing import Callable, cast
-import pkuseg
+import smokesignal
+from typing import Callable
 from loguru import logger
 
 from dictionary import Dictionary, DictionaryEntry, Language, parse, segment_into_subphrases
@@ -169,7 +168,10 @@ class Controller:
         if self.previous_preset == None:
             logger.error('Unable to capture with previous preset')
         else:
-            self.on_partial_capture(self.previous_preset)
+            screenshot = self.on_partial_capture(self.previous_preset)
+            result = self.process_image(screenshot)
+
+            smokesignal.emit('update_translation_results', preset=self.previous_preset, result=result)
 
     def on_show_monitor_info(self):
         logger.info('Showing monitor info: {}'.format(
