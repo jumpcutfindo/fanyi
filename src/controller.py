@@ -15,6 +15,7 @@ class Controller:
     def __init__(self, file_manager: FileManager, preference_manager: PreferenceManager):
         self.file_manager = file_manager
         self.preference_manager = preference_manager
+        self.previous_preset = None
 
         self.input_listener = InputListener()
         self.hotkeys = []
@@ -158,6 +159,15 @@ class Controller:
             result.append(entry)
 
         return result
+
+    def set_previous_preset(self, preset: Preset):
+        self.previous_preset = preset 
+
+    def on_capture_with_latest_preset(self):
+        if self.previous_preset == None:
+            logger.error('Unable to capture with previous preset')
+        else:
+            self.on_partial_capture(self.previous_preset)
 
     def on_show_monitor_info(self):
         logger.info('Showing monitor info: {}'.format(
