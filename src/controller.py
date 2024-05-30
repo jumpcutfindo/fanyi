@@ -41,6 +41,8 @@ class Controller:
     def __register_hotkeys(self):
         logger.info("Registering hotkeys...")
         self.__register_hotkey(
+            'capture_with_previous_preset', '<ctrl>+<alt>+g', lambda: self.on_capture_with_previous_preset())
+        self.__register_hotkey(
             'show_monitor_info', '<ctrl>+<alt>+m', lambda: self.on_show_monitor_info())
 
         logger.info("Registered {} hotkeys".format(len(self.hotkeys)))
@@ -163,7 +165,7 @@ class Controller:
     def set_previous_preset(self, preset: Preset):
         self.previous_preset = preset 
 
-    def on_capture_with_latest_preset(self):
+    def on_capture_with_previous_preset(self):
         if self.previous_preset == None:
             logger.error('Unable to capture with previous preset')
         else:
@@ -176,3 +178,4 @@ class Controller:
     def on_exit_app(self):
         logger.info('Exiting application...')
         self.input_listener.stop()
+
