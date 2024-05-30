@@ -43,6 +43,9 @@ class MainFrameContainer:
 
     def scaled(self, width):
         return round(width * self.scale)
+    
+    def get_root(self):
+        return self.root
 
     def get_controller(self):
         return self.controller

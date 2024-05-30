@@ -29,6 +29,21 @@ class Controller:
         logger.info("Starting controller...")
         self.input_listener.start()
 
+    def __register_hotkey(self, name: str, combo: str, action: Callable):
+        self.hotkeys.append({
+            name: name, combo: combo, action: action
+        })
+        self.input_listener.register_hotkey(name, combo, action)
+        logger.debug(
+            'Hotkey: Registered {} for action "{}"'.format(combo, name))
+
+    def __register_hotkeys(self):
+        logger.info("Registering hotkeys...")
+        self.__register_hotkey(
+            'show_monitor_info', '<ctrl>+<alt>+m', lambda: self.on_show_monitor_info())
+
+        logger.info("Registered {} hotkeys".format(len(self.hotkeys)))
+
     def parse_dictionary(self, path: str):
         logger.info(f'Attempting to parse dictionary at "{path}"')
 
@@ -64,24 +79,6 @@ class Controller:
 
     def get_supported_languages(self) -> dict[str, str]:
         return {lang.name: lang.value for lang in Language}
-
-    def __register_hotkey(self, name: str, combo: str, action: Callable):
-        self.hotkeys.append({
-            name: name, combo: combo, action: action
-        })
-        self.input_listener.register_hotkey(name, combo, action)
-        logger.debug(
-            'Hotkey: Registered {} for action "{}"'.format(combo, name))
-
-    def __register_hotkeys(self):
-        logger.info("Registering hotkeys...")
-        # TODO: Figure out how to make this customisable
-        self.__register_hotkey(
-            'exit', '<ctrl>+<alt>+e', lambda: self.on_exit_app())
-        self.__register_hotkey(
-            'show_monitor_info', '<ctrl>+<alt>+m', lambda: self.on_show_monitor_info())
-
-        logger.info("Registered {} hotkeys".format(len(self.hotkeys)))
 
     def on_partial_capture(self, preset: Preset):
         logger.info('Capturing and processing partial...')
