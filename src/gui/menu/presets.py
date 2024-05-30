@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from gui import MainFrameContainer
     from gui.menu import MenuFrameContainer
 
+from gui.components import CustomOptionMenu
 from gui.preview import PreviewFrameContainer
 from screen import screenshot
 
@@ -72,7 +73,7 @@ class PresetsFrameContainer:
             row=1, column=0, sticky=tk.W, padx=(0, 16), pady=8)
 
         self.screen_value_var = tk.StringVar(self.root.frame)
-        screen_dropdown = tk.OptionMenu(self.preset_config_frame, self.screen_value_var,
+        screen_dropdown = CustomOptionMenu(self.preset_config_frame, self.screen_value_var,
                                         *self.screen_display_names, command=lambda w : self.__on_screen_selected(w, True))
         screen_dropdown.grid(row=1, column=1, sticky=tk.NSEW, pady=8)
 

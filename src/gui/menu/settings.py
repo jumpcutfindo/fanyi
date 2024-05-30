@@ -2,6 +2,8 @@ import tkinter as tk
 from loguru import logger
 from typing import TYPE_CHECKING
 
+from gui.components import CustomOptionMenu
+
 if TYPE_CHECKING:
     from gui import MainFrameContainer
     from gui.menu import MenuFrameContainer
@@ -88,7 +90,7 @@ class SettingsFrameContainer:
         language_var = tk.StringVar(self.root.frame, "language")
 
         language_var.set(list(self.supported_languages.values())[0])
-        language_dropdown = tk.OptionMenu(
+        language_dropdown = CustomOptionMenu(
             self.frame, language_var, *self.supported_languages.values(), command=self.__on_select_language)
         language_dropdown.grid(
             row=3, column=1, sticky=tk.EW
