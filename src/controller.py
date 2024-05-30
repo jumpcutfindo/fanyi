@@ -175,7 +175,3 @@ class Controller:
         logger.info('Showing monitor info: {}'.format(
             screenshot.get_monitors()))
 
-    def on_exit_app(self):
-        logger.info('Exiting application...')
-        self.input_listener.stop()
-

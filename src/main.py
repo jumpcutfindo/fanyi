@@ -33,12 +33,5 @@ def main():
 
     gui.start()
 
-    # Setup on close stuff
-    gui_root = gui.get_root()
-    gui_root.protocol("WM_DELETE_WINDOW", lambda: on_close(gui, controller))
-
-def on_close(gui: MainFrameContainer, controller: Controller):
-    controller.on_exit_app()
-
 if __name__ == "__main__":
     main()
