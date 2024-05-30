@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter.filedialog import askopenfilename
 from PIL import ImageTk, Image
 from typing import TYPE_CHECKING
 
@@ -28,11 +29,14 @@ class ScreenshotFrameContainer:
         self.frame.bind('<Configure>', self.__handle_resize)
 
         title_frame = tk.Frame(self.frame)
-        title_frame.grid(row=0, column=0, sticky=tk.NW)
+        title_frame.grid(row=0, column=0, sticky=tk.NSEW)
 
         self.translations_label = tk.Label(
             title_frame, text="Screenshot", justify=tk.LEFT)
-        self.translations_label.pack(side=tk.TOP, pady=8)
+        self.translations_label.pack(side=tk.LEFT, pady=8)
+
+        open_file_control = tk.Button(title_frame, text='Open Screenshot...', command=self.__on_select_file)
+        open_file_control.pack(side=tk.RIGHT, pady=8)
 
         self.image_label = tk.Label(self.frame, cursor='hand1')
         self.image_label.grid(sticky=tk.NSEW)
@@ -46,9 +50,6 @@ class ScreenshotFrameContainer:
 
         self.screenshot_src = src
         self.screenshot = Image.open(src)
-
-        # Set the label to include preset name
-        self.translations_label.configure(text=f'Screenshot ({self.preset.name})')
         
         self.__configure_resized_image()
 
@@ -81,3 +82,7 @@ class ScreenshotFrameContainer:
             title = f'{self.screenshot_src} (L: {self.preset.left}; T: {self.preset.top}; W: {self.preset.width}; H: {self.preset.height})'
 
         self.root.show_screenshot_preview(title, self.screenshot_src)
+
+    def __on_select_file(self):
+        filename = askopenfilename()
+        self.root.on_process(filename)
