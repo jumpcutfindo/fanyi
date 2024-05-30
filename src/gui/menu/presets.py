@@ -34,6 +34,9 @@ class PresetsFrameContainer:
         self.__preset_list_section()
         self.__preset_controls_section()
 
+        # Initialize controller with initial preset
+        self.__update_previous_preset()
+
     def __get_screen_info(self):
         screen_info = screenshot.get_monitors()
 
@@ -218,6 +221,8 @@ class PresetsFrameContainer:
         self.width_value_var.set(self.selected_preset.width)
         self.height_value_var.set(self.selected_preset.height)
 
+        self.__update_previous_preset()
+
     def __on_save_preset(self):
         preset_name = self.preset_name_var.get()
         screen = self.screen_display_to_info_map[self.screen_value_var.get(
@@ -233,6 +238,7 @@ class PresetsFrameContainer:
             preset_name, screen, left, top, width, height)
 
         self.__load_presets_into_listbox()
+        self.__update_previous_preset()
 
     def __on_delete_preset(self):
         preset_name = self.preset_name_var.get()
@@ -273,3 +279,7 @@ class PresetsFrameContainer:
     def __on_screenshot_and_process(self):
         current_preset = self.__get_preset_with_current_settings()
         self.root.on_screenshot_and_process(current_preset)
+
+    def __update_previous_preset(self):
+        self.root.get_controller().set_previous_preset(
+            self.__get_preset_with_current_settings())
