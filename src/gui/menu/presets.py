@@ -1,5 +1,4 @@
 import tkinter as tk
-from PIL import ImageTk
 from loguru import logger
 from typing import TYPE_CHECKING
 
@@ -8,7 +7,6 @@ if TYPE_CHECKING:
     from gui.menu import MenuFrameContainer
 
 from gui.components import CustomOptionMenu
-from gui.preview import PreviewFrameContainer
 from screen import screenshot
 
 

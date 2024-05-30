@@ -38,7 +38,12 @@ class ScreenshotFrameContainer:
         self.image_label.grid(sticky=tk.NSEW)
 
     def set_screenshot(self, preset, src):
-        self.preset = preset
+        if self.preset:
+            self.preset = preset
+            
+            # Set the label to include preset name
+            self.translations_label.configure(text=f'Screenshot ({self.preset.name})')
+
         self.screenshot_src = src
         self.screenshot = Image.open(src)
 

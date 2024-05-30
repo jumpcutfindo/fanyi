@@ -3,7 +3,7 @@ import tkinter as tk
 from controller import Controller
 from gui.preview import PreviewFrameContainer
 from preferences import PreferenceManager
-from presets import PresetManager
+from presets import Preset, PresetManager
 
 from .menu import MenuFrameContainer
 from .results import ResultFrameContainer
@@ -61,8 +61,12 @@ class MainFrameContainer:
         screenshots = self.controller.on_partial_capture(preset)
         result = self.controller.process_image(screenshots)
         self.set_results(preset, result)
+    
+    def on_process(self, screenshot):
+        result = self.controller.process_image(screenshot)
+        self.set_results(None, result)
 
-    def set_results(self, preset, result):
+    def set_results(self, preset: Preset | None, result):
         filename, phrases = result
         self.result_frame.set_results(preset, filename, phrases)
 
