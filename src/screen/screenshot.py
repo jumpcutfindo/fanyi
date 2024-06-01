@@ -18,8 +18,7 @@ def take_full_screenshot(save_location):
 def take_monitor_screenshot(save_location, monitor):
     logger.info('Taking monitor {} screenshot...'.format(monitor))
 
-    filename = f'{save_location}\\{
-        __get_screenshot_name()}_monitor-{monitor}.png'
+    filename = f'{save_location}\\{__get_screenshot_name()}_monitor-{monitor}.png'
 
     sct = mss.mss()
     filenames = sct.save(mon=monitor, output=filename)
