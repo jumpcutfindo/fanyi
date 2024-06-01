@@ -12,40 +12,39 @@ class TranslationsFrameContainer:
         self.frame = tk.Frame(parent.frame)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
+        self.__setup_title_frame()
+        self.__setup_scrollable_frame()
+
+    def __setup_title_frame(self):
         title_frame = tk.Frame(self.frame)
         title_frame.pack(side=tk.TOP, anchor=tk.NW, padx=8)
 
         translations_label = tk.Label(
             title_frame, text="Translations", justify=tk.LEFT, pady=8)
         translations_label.pack(side=tk.TOP)
+    
+    def __setup_scrollable_frame(self):
+        self.canvas = tk.Canvas(self.frame)
+        self.canvas.bind("<Configure>", self.__handle_resize)
 
-        canvas = tk.Canvas(self.frame)
-        scrollbar = tk.Scrollbar(
-            self.frame, orient="vertical", command=canvas.yview)
-        scrollable_frame = tk.Frame(canvas)
+        # Setup scrollbar
+        self.scrollbar = tk.Scrollbar(self.frame, orient=tk.VERTICAL)
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.scrollbar.config(command=self.canvas.yview)
+        self.canvas.config(yscrollcommand=self.scrollbar.set)
+        
+        # Setup scrollable frame
+        self.scrollable_frame = tk.Frame(self.canvas)
+        self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor=tk.NW, tags=('canvas_frame'))
 
-        scrollable_frame.pack(side=tk.LEFT)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        canvas.create_window((0, 0), window=scrollable_frame,
-                             anchor=tk.NW, tags=('canvas_frame'))
-        canvas.bind('<Configure>', self.__handle_resize)
-        canvas.configure(yscrollcommand=scrollbar.set)
-
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(
-                scrollregion=canvas.bbox("all")
-            )
-        )
-
-        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
-        self.canvas = canvas
-        self.scrollable_frame = scrollable_frame
-
+        # Setup other widgets
         self.table_widgets = []
         self.sentence_labels = []
+
 
     def __handle_resize(self, event):
         canvas = event.widget
