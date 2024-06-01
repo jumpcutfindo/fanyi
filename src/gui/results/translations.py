@@ -36,6 +36,10 @@ class TranslationsFrameContainer:
         # Setup scrollable frame
         self.scrollable_frame = tk.Frame(self.canvas)
         self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
+        
+        self.scrollable_frame.bind('<Enter>', self.__bind_to_mousewheel)
+        self.scrollable_frame.bind('<Leave>', self.__unbind_to_mousewheel)
+        
         self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor=tk.NW, tags=('canvas_frame'))
 
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -131,3 +135,12 @@ class TranslationsFrameContainer:
                 # Add labels to list for refresh calculations
                 self.table_widgets.append(
                     (translation_frame, simplified_label, traditional_label, pinyin_label, definitions_label))
+
+    def __bind_to_mousewheel(self, event):
+        self.canvas.bind_all('<MouseWheel>', self.__on_mousewheel)
+
+    def __unbind_to_mousewheel(self, event):
+        self.canvas.unbind_all('<MouseWheel>')
+
+    def __on_mousewheel(self, event):
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
