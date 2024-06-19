@@ -8,6 +8,7 @@ from controller import Controller
 from presets import Preset, PresetManager
 from files import FileManager
 from preferences import PreferenceManager
+import coordinator
 
 from gui import MainFrameContainer
 
@@ -32,17 +33,9 @@ def main():
     global gui
     gui = MainFrameContainer(controller, preset_manager, preference_manager)
 
+    coordinator.init(controller, gui)
+
     gui.start()
-
-@smokesignal.on('set_processing')
-def set_processing(is_processing: bool):
-    if gui:
-        gui.set_processing(is_processing)
-
-@smokesignal.on('update_translation_results')
-def update_translation_results(preset: Preset, result):
-    if gui:
-        gui.set_results(preset, result)    
 
 if __name__ == "__main__":
     main()

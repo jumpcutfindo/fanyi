@@ -1,47 +1,53 @@
+import smokesignal
+
 from threading import Thread
 from controller import Controller
 from gui import MainFrameContainer
 from presets import Preset
 
+def init(c: Controller, g: MainFrameContainer):
+    global controller
+    global gui
 
-# The Coordinator class intends to act as an in-between for the Controller and GUI.
-# Functionality that requires the coordination between these two classes should be implemented here.
-class Coordinator:
-    def __init__(self, controller: Controller, gui: MainFrameContainer):
-        self.controller = controller
-        self.gui = gui
+    controller = c
+    gui = g
     
-    def process_and_update(self, preset: Preset, screenshot: str):
-        def action():
-            self.gui.set_processing(True)
-            
-            result = self.__process(screenshot)
+@smokesignal.on('process_and_update')
+def process_and_update(preset: Preset, screenshot: str):
+    if not gui:
+        return
 
-            self.gui.set_results(preset, result)
+    def action():
+        gui.set_processing(True)
+        
+        result = __process(screenshot)
 
-            self.gui.set_processing(False)
+        gui.set_results(preset, result)
 
-        thread = Thread(target=action)
-        thread.start()
+        gui.set_processing(False)
 
-    def screenshot_and_update(self, preset: Preset):
-        def action():
-            self.gui.set_processing(True)
-            
-            screenshot = self.__screenshot(preset)
-            result = self.__process(screenshot)
+    thread = Thread(target=action)
+    thread.start()
 
-            self.gui.set_results(preset, result)
+@smokesignal.on('screenshot_and_update')
+def screenshot_and_update(preset: Preset):
+    def action():
+        gui.set_processing(True)
+        
+        screenshot = __screenshot(preset)
+        result = __process(screenshot)
 
-            self.gui.set_processing(False)
+        gui.set_results(preset, result)
 
-        thread = Thread(target=action)
-        thread.start()
+        gui.set_processing(False)
 
-    def __screenshot(self, preset: Preset):
-        screenshot = self.controller.on_partial_capture(preset)
-        return screenshot
-    
-    def __process(self, screenshot: str):
-        result = self.controller.process_image(screenshot)
-        return result
+    thread = Thread(target=action)
+    thread.start()
+
+def __screenshot(preset: Preset):
+    screenshot = controller.on_partial_capture(preset)
+    return screenshot
+
+def __process(screenshot: str):
+    result = controller.process_image(screenshot)
+    return result
