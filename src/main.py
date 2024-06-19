@@ -34,6 +34,11 @@ def main():
 
     gui.start()
 
+@smokesignal.on('set_processing')
+def set_processing(is_processing: bool):
+    if gui:
+        gui.set_processing(is_processing)
+
 @smokesignal.on('update_translation_results')
 def update_translation_results(preset: Preset, result):
     if gui:

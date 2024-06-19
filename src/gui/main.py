@@ -18,6 +18,8 @@ class MainFrameContainer:
         self.preset_manager = preset_manager
         self.preference_manager = preference_manager
 
+        self.is_processing = False
+
         self.root = tk.Tk()
         self.root.title("Fanyi")
 
@@ -77,3 +79,6 @@ class MainFrameContainer:
     def show_screenshot_preview(self, title: str, screenshot_file: str):
         preview_frame = PreviewFrameContainer(self, title, screenshot_file)
         preview_frame.show()
+
+    def set_processing(self, is_processing: bool):
+        self.is_processing = is_processing
