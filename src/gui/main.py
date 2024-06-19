@@ -1,3 +1,4 @@
+from threading import Thread
 import tkinter as tk
 import smokesignal
 
@@ -64,13 +65,25 @@ class MainFrameContainer:
         return screenshots
 
     def on_screenshot_and_process(self, preset):
-        screenshots = self.controller.on_partial_capture(preset)
-        result = self.controller.process_image(screenshots)
-        self.set_results(preset, result)
+        def process():
+            self.set_processing(True)
+            screenshots = self.controller.on_partial_capture(preset)
+            result = self.controller.process_image(screenshots)
+            self.set_processing(False)
+            self.set_results(preset, result)
+        
+        thread = Thread(target=process)
+        thread.start()
     
     def on_process(self, screenshot):
-        result = self.controller.process_image(screenshot)
-        self.set_results(None, result)
+        def process():
+            self.set_processing(True)
+            result = self.controller.process_image(screenshot)
+            self.set_results(None, result)
+            self.set_processing(False)
+
+        thread = Thread(target=process)
+        thread.start()
 
     def set_results(self, preset: Preset | None, result):
         filename, phrases = result

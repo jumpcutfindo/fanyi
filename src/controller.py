@@ -1,3 +1,4 @@
+from threading import Thread
 import smokesignal
 from typing import Callable
 from loguru import logger
@@ -168,10 +169,17 @@ class Controller:
         if self.previous_preset == None:
             logger.error('Unable to capture with previous preset')
         else:
-            screenshot = self.on_partial_capture(self.previous_preset)
-            result = self.process_image(screenshot)
+            def process(previous_preset: Preset):
+                smokesignal.emit('set_processing', True)
+                screenshot = self.on_partial_capture(previous_preset)
+                result = self.process_image(screenshot)
 
-            smokesignal.emit('update_translation_results', preset=self.previous_preset, result=result)
+                smokesignal.emit('update_translation_results', preset=self.previous_preset, result=result)
+                smokesignal.emit('set_processing', False)
+            
+            thread = Thread(target=process, args=(self.previous_preset,))
+            thread.start()
+                
 
     def on_show_monitor_info(self):
         logger.info('Showing monitor info: {}'.format(
