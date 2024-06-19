@@ -23,3 +23,9 @@ class MenuFrameContainer:
         sep.pack(side=tk.TOP, fill=tk.X)
 
         self.presets_frame = PresetsFrameContainer(self.parent, self)
+    
+    def enable_processing(self):
+        self.presets_frame.enable_processing()
+    
+    def disable_processing(self):
+        self.presets_frame.disable_processing()

@@ -26,3 +26,9 @@ class ResultFrameContainer:
         screenshot = filename
         self.screenshot_frame.set_screenshot(preset, screenshot)
         self.translation_frame.set_translations(phrases)
+
+    def enable_processing(self):
+        self.screenshot_frame.enable_processing()
+
+    def disable_processing(self):
+        self.screenshot_frame.disable_processing()

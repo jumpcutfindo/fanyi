@@ -82,3 +82,10 @@ class MainFrameContainer:
 
     def set_processing(self, is_processing: bool):
         self.is_processing = is_processing
+
+        if is_processing:
+            self.menu_frame.disable_processing()
+            self.result_frame.disable_processing()
+        else:
+            self.menu_frame.enable_processing()
+            self.result_frame.enable_processing()

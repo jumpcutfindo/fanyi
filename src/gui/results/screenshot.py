@@ -35,8 +35,8 @@ class ScreenshotFrameContainer:
             title_frame, text="Screenshot", justify=tk.LEFT)
         self.translations_label.pack(side=tk.LEFT, pady=8)
 
-        open_file_control = tk.Button(title_frame, text='Open Screenshot...', command=self.__on_select_file)
-        open_file_control.pack(side=tk.RIGHT, pady=8)
+        self.open_file_control = tk.Button(title_frame, text='Open Screenshot...', command=self.__on_select_file)
+        self.open_file_control.pack(side=tk.RIGHT, pady=8)
 
         self.image_label = tk.Label(self.frame, cursor='hand1')
         self.image_label.grid(sticky=tk.NSEW)
@@ -52,6 +52,12 @@ class ScreenshotFrameContainer:
         self.screenshot = Image.open(src)
         
         self.__configure_resized_image()
+
+    def enable_processing(self):
+        self.open_file_control.config(state=tk.NORMAL)
+
+    def disable_processing(self):
+        self.open_file_control.config(state=tk.DISABLED)
 
     def __configure_resized_image(self):
         if not self.screenshot:

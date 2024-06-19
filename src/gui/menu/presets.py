@@ -37,6 +37,12 @@ class PresetsFrameContainer:
         # Initialize controller with initial preset
         self.__update_previous_preset()
 
+    def enable_processing(self):
+        self.screenshot_control.config(state=tk.NORMAL)
+
+    def disable_processing(self):
+        self.screenshot_control.config(state=tk.DISABLED)
+
     def __get_screen_info(self):
         screen_info = screenshot.get_monitors()
 
@@ -178,9 +184,9 @@ class PresetsFrameContainer:
             row=5, column=0, pady=8, sticky=tk.NSEW)
         self.preset_controls_frame.grid_columnconfigure(0, weight=1)
 
-        screenshot_control = tk.Button(
+        self.screenshot_control = tk.Button(
             self.preset_controls_frame, text="Screenshot", command=self.__on_screenshot_and_process)
-        screenshot_control.grid(row=0, column=0, sticky=tk.NSEW)
+        self.screenshot_control.grid(row=0, column=0, sticky=tk.NSEW)
 
     def __on_screen_selected(self, screen_name, is_user_input: bool):
         if is_user_input:
