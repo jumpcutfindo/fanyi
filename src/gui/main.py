@@ -65,25 +65,10 @@ class MainFrameContainer:
         return screenshots
 
     def on_screenshot_and_process(self, preset):
-        def process():
-            self.set_processing(True)
-            screenshots = self.controller.on_partial_capture(preset)
-            result = self.controller.process_image(screenshots)
-            self.set_processing(False)
-            self.set_results(preset, result)
-        
-        thread = Thread(target=process)
-        thread.start()
+        smokesignal.emit('screenshot_and_update', preset=preset)
     
     def on_process(self, screenshot):
-        def process():
-            self.set_processing(True)
-            result = self.controller.process_image(screenshot)
-            self.set_results(None, result)
-            self.set_processing(False)
-
-        thread = Thread(target=process)
-        thread.start()
+        smokesignal.emit('process_and_update', screenshot=screenshot)
 
     def set_results(self, preset: Preset | None, result):
         filename, phrases = result

@@ -13,7 +13,7 @@ def init(c: Controller, g: MainFrameContainer):
     gui = g
     
 @smokesignal.on('process_and_update')
-def process_and_update(preset: Preset, screenshot: str):
+def process_and_update(screenshot: str):
     if not gui:
         return
 
@@ -22,7 +22,7 @@ def process_and_update(preset: Preset, screenshot: str):
         
         result = __process(screenshot)
 
-        gui.set_results(preset, result)
+        gui.set_results(None, result)
 
         gui.set_processing(False)
 
