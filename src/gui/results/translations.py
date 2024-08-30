@@ -84,7 +84,7 @@ class TranslationsFrameContainer:
 
             # Sentence
             sentence_label = tk.Label(
-                containing_frame, text=key, font=('Microsoft Yahei', 14), background='white', justify='left', wraplength=self.scrollable_frame.winfo_width() - 32)
+                containing_frame, text=key, font=('Microsoft Yahei', 15), background='white', justify='left', wraplength=self.scrollable_frame.winfo_width() - 32)
             sentence_label.pack(padx=8, pady=8, anchor=tk.W)
             self.sentence_labels.append(sentence_label)
 
@@ -96,7 +96,7 @@ class TranslationsFrameContainer:
 
             if not entries or len(entries) == 0:
                 not_exists_label = tk.Label(
-                    translation_frame, text='No words found', font=('Microsoft Yahei', 10, 'italic'), background='white')
+                    translation_frame, text='No words found', font=('Microsoft Yahei', 12, 'italic'), background='white')
                 not_exists_label.grid(
                     row=0, column=0, padx=8, pady=8, sticky=tk.W)
                 continue
@@ -107,24 +107,24 @@ class TranslationsFrameContainer:
                     continue
 
                 simplified_label = tk.Label(translation_frame, text=f'{entry.simplified}', font=(
-                    'Microsoft Yahei', 10), background='white')
+                    'Microsoft Yahei', 12), background='white')
                 simplified_label.grid(
                     row=index, column=0, padx=(0, 8), sticky=tk.NW)
 
                 traditional_label = tk.Label(translation_frame, text=f'({entry.traditional})', font=(
-                    'Microsoft Yahei', 10), background='white')
+                    'Microsoft Yahei', 12), background='white')
                 traditional_label.grid(
                     row=index, column=1, padx=8, sticky=tk.NW)
 
                 pinyin_label = tk.Label(translation_frame, text=f'{entry.pinyin}', font=(
-                    'Microsoft Yahei', 10), background='white')
+                    'Microsoft Yahei', 12), background='white')
                 pinyin_label.grid(row=index, column=2, padx=8, sticky=tk.NW)
 
                 definitions = []
                 for i, d in enumerate(entry.definitions):
                     definitions.append(f'{i+1}. {d}')
                 definitions_label = tk.Label(translation_frame, font=(
-                    'Microsoft Yahei', 10), text='\n'.join(definitions), background='white', justify='left', wraplength=300)
+                    'Microsoft Yahei', 12), text='\n'.join(definitions), background='white', justify='left', wraplength=300)
 
                 definitions_label_padding_y = 16 if index < len(
                     entries) - 1 else 0
