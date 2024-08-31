@@ -1,5 +1,8 @@
+import json
 import tkinter as tk
 from typing import TYPE_CHECKING
+
+from loguru import logger
 
 if TYPE_CHECKING:
     from gui.results import ResultFrameContainer
@@ -8,6 +11,7 @@ if TYPE_CHECKING:
 class TranslationsFrameContainer:
     def __init__(self, parent: "ResultFrameContainer"):
         self.parent = parent
+        self.current_translations = None
 
         self.frame = tk.Frame(parent.frame)
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
@@ -17,11 +21,16 @@ class TranslationsFrameContainer:
 
     def __setup_title_frame(self):
         title_frame = tk.Frame(self.frame)
-        title_frame.pack(side=tk.TOP, anchor=tk.NW, padx=8)
+        title_frame.pack(side=tk.TOP, anchor=tk.NW, padx=8, fill=tk.BOTH)
 
         translations_label = tk.Label(
             title_frame, text="Translations", justify=tk.LEFT, pady=8)
-        translations_label.pack(side=tk.TOP)
+        translations_label.pack(side=tk.LEFT, pady=8)
+
+        copy_to_clipboard_button = tk.Button(
+            title_frame, text="Copy to Clipboard", justify=tk.RIGHT, command=self.__copy_translations_to_clipboard, 
+        )
+        copy_to_clipboard_button.pack(side=tk.RIGHT, pady=8)
     
     def __setup_scrollable_frame(self):
         self.canvas = tk.Canvas(self.frame)
@@ -73,6 +82,8 @@ class TranslationsFrameContainer:
     def set_translations(self, translations):
         self.table_widgets = []
         self.sentence_labels = []
+
+        self.current_translations = translations
 
         for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
@@ -144,3 +155,19 @@ class TranslationsFrameContainer:
 
     def __on_mousewheel(self, event):
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    def __copy_translations_to_clipboard(self):
+        if not self.current_translations:
+            return
+
+        # Convert to full chunk of text
+        text = '; '.join(list(self.current_translations.keys()))
+
+        r = tk.Tk()
+        r.withdraw()
+        r.clipboard_clear()
+        r.clipboard_append(text)
+        r.update()
+        r.destroy()
+
+        logger.info('Copied translations to clipboard')
