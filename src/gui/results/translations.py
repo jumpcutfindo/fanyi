@@ -63,6 +63,7 @@ class TranslationsFrameContainer:
         # Setup other widgets
         self.table_widgets = []
         self.sentence_labels = []
+        self.all_simplified_words_to_pos_map = {}
 
 
     def __handle_resize(self, event):
@@ -88,16 +89,23 @@ class TranslationsFrameContainer:
     def set_translations(self, translations):
         self.table_widgets = []
         self.sentence_labels = []
+        self.all_simplified_words_to_pos_map = {}
 
         self.current_translations = translations
+
+        containing_frames = []
 
         for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
 
+        # Offset for tracking what y-pos we're currently at
+        current_y_offset = 0
         for index, (key, entries) in enumerate(translations.items()):
             containing_frame = tk.Frame(
                 self.scrollable_frame, background='white')
             containing_frame.pack(fill=tk.X, pady=4, padx=8, expand=True)
+
+            containing_frames.append(containing_frame)
 
             # Sentence
             sentence_label = tk.Label(
@@ -105,6 +113,7 @@ class TranslationsFrameContainer:
             sentence_label.pack(padx=8, pady=8, anchor=tk.W)
             self.sentence_labels.append(sentence_label)
 
+            # Translations, holds each entry and details
             translation_frame = tk.Frame(
                 containing_frame, background='white')
             translation_frame.pack(
@@ -119,6 +128,7 @@ class TranslationsFrameContainer:
                 continue
 
             # Insert each entry as a line
+            entry_y_offset = 0
             for index, entry in enumerate(entries):
                 if not entry:
                     continue
@@ -153,6 +163,54 @@ class TranslationsFrameContainer:
                 self.table_widgets.append(
                     (translation_frame, simplified_label, traditional_label, pinyin_label, definitions_label))
 
+                # Add simplified word to map with its y-pos
+                # We use only the first entry's y-pos for simplicity
+                if entry.simplified not in self.all_simplified_words_to_pos_map:
+                    self.all_simplified_words_to_pos_map[entry.simplified] = current_y_offset
+                
+            self.scrollable_frame.update_idletasks()
+            current_y_offset = self.scrollable_frame.winfo_height() + len(entries) * 20
+            print(current_y_offset, self.scrollable_frame.winfo_height())
+        
+        print (self.all_simplified_words_to_pos_map)
+
+        # Adjust positions to proportional of height
+        final_scrollable_height = self.scrollable_frame.winfo_height()
+        for key in self.all_simplified_words_to_pos_map.keys():
+            self.all_simplified_words_to_pos_map[key] = float(self.all_simplified_words_to_pos_map[key]) / float(final_scrollable_height)
+
+        # Populate side frame
+
+        # Delete all widgets in side frame
+        for widget in self.side_frame.winfo_children():
+            widget.destroy()
+
+        side_frame_line = tk.Frame(self.side_frame)
+
+        # Function for scrolling to a specific word at its y-pos
+        scroll_to_word = lambda word: lambda: self.__scroll_to_y_pos(self.all_simplified_words_to_pos_map[word])
+
+        for word in self.all_simplified_words_to_pos_map.keys():
+            side_frame_line.update_idletasks()
+
+            simplified_button = tk.Button(side_frame_line, text=word, font=('Microsoft Yahei', 10), command=scroll_to_word(word))
+
+            simplified_button_width = simplified_button.winfo_reqwidth()
+            side_frame_line_width = side_frame_line.winfo_reqwidth()
+
+            if side_frame_line_width + simplified_button_width > self.side_frame_width:
+                # Length of line is too long, create new line
+                side_frame_line.pack(side=tk.TOP, anchor=tk.NW, pady=2)
+
+                side_frame_line = tk.Frame(self.side_frame)
+                simplified_button = tk.Button(side_frame_line, text=word, font=('Microsoft Yahei', 10), command=scroll_to_word(word))
+
+            simplified_button.pack(side=tk.LEFT, padx=1, pady=1)
+
+    def __scroll_to_y_pos(self, y_pos):
+        print(y_pos, self.scrollable_frame.winfo_height(), self.canvas.winfo_y(), self.canvas.winfo_height())
+        self.canvas.yview_moveto(y_pos)
+
     def __bind_to_mousewheel(self, event):
         self.canvas.bind_all('<MouseWheel>', self.__on_mousewheel)
 
@@ -177,3 +235,4 @@ class TranslationsFrameContainer:
         r.destroy()
 
         logger.info('Copied translations to clipboard')
+
