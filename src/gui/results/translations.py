@@ -92,8 +92,8 @@ class TranslationsFrameContainer:
 
         self.table_widgets = []
 
-        self.simplified_label_map = {}
-        self.current_selected_simplified_label = None
+        self.label_map = {}
+        self.current_selected_simplified = None
         
         self.sentence_labels = []
         self.all_simplified_words_to_pos_map = {}
@@ -144,10 +144,6 @@ class TranslationsFrameContainer:
                     'Microsoft Yahei', 12), background='white')
                 simplified_label.grid(
                     row=index, column=0, padx=(0, 8), sticky=tk.NW)
-                
-                # Add to simplified label map
-                if entry.simplified not in self.simplified_label_map:
-                    self.simplified_label_map[entry.simplified] = simplified_label
 
                 traditional_label = tk.Label(translation_frame, text=f'({entry.traditional})', font=(
                     'Microsoft Yahei', 12), background='white')
@@ -173,16 +169,21 @@ class TranslationsFrameContainer:
                 # Add labels to list for refresh calculations
                 self.table_widgets.append(
                     (translation_frame, simplified_label, traditional_label, pinyin_label, definitions_label))
+                
+                # Add to simplified label map
+                if entry.simplified not in self.label_map:
+                    self.label_map[entry.simplified] = (simplified_label, traditional_label, pinyin_label, definitions_label)
+
+                translation_frame.update_idletasks()
+                entry_y_offset = translation_frame.winfo_height()
 
                 # Add simplified word to map with its y-pos
                 # We use only the first entry's y-pos for simplicity
                 if entry.simplified not in self.all_simplified_words_to_pos_map:
                     self.all_simplified_words_to_pos_map[entry.simplified] = current_y_offset + entry_y_offset
-
-                entry_y_offset += translation_frame.winfo_height()
                 
             self.scrollable_frame.update_idletasks()
-            current_y_offset = self.scrollable_frame.winfo_height() + len(entries) * 12
+            current_y_offset = self.scrollable_frame.winfo_height() + len(entries) * 20
 
         # Adjust positions to proportional of height
         final_scrollable_height = self.scrollable_frame.winfo_height()
@@ -200,11 +201,13 @@ class TranslationsFrameContainer:
         # Function for scrolling to a specific word at its y-pos
         def scroll_to_word(word):
             def internal_func():
-                if self.current_selected_simplified_label:
-                    self.current_selected_simplified_label.config(bg="white")
+                if self.current_selected_simplified:
+                    for label in self.label_map[self.current_selected_simplified]:
+                        label.config(bg="white")
 
-                self.current_selected_simplified_label = self.simplified_label_map[word]
-                self.simplified_label_map[word].config(bg="yellow")
+                self.current_selected_simplified = word
+                for label in self.label_map[word]:
+                        label.config(bg="yellow")
                 self.__scroll_to_y_pos(self.all_simplified_words_to_pos_map[word])
             return internal_func
 
