@@ -17,6 +17,7 @@ class TranslationsFrameContainer:
         self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
         self.__setup_title_frame()
+        self.__setup_side_frame()
         self.__setup_scrollable_frame()
 
     def __setup_title_frame(self):
@@ -31,6 +32,11 @@ class TranslationsFrameContainer:
             title_frame, text="Copy to Clipboard", justify=tk.RIGHT, command=self.__copy_translations_to_clipboard, 
         )
         copy_to_clipboard_button.pack(side=tk.RIGHT, pady=8)
+    
+    def __setup_side_frame(self):
+        self.side_frame_width = 300
+        self.side_frame = tk.Frame(self.frame, width=self.side_frame_width)
+        self.side_frame.pack(side=tk.LEFT, anchor=tk.NW, padx=8, fill=tk.BOTH)
     
     def __setup_scrollable_frame(self):
         self.canvas = tk.Canvas(self.frame)
