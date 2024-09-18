@@ -87,7 +87,14 @@ class TranslationsFrameContainer:
                     wraplength=self.scrollable_frame.winfo_width() - 32)
 
     def set_translations(self, translations):
+        # Reset canvas scroll
+        self.canvas.yview_moveto(0)
+
         self.table_widgets = []
+
+        self.simplified_label_map = {}
+        self.current_selected_simplified_label = None
+        
         self.sentence_labels = []
         self.all_simplified_words_to_pos_map = {}
 
@@ -137,6 +144,10 @@ class TranslationsFrameContainer:
                     'Microsoft Yahei', 12), background='white')
                 simplified_label.grid(
                     row=index, column=0, padx=(0, 8), sticky=tk.NW)
+                
+                # Add to simplified label map
+                if entry.simplified not in self.simplified_label_map:
+                    self.simplified_label_map[entry.simplified] = simplified_label
 
                 traditional_label = tk.Label(translation_frame, text=f'({entry.traditional})', font=(
                     'Microsoft Yahei', 12), background='white')
@@ -166,13 +177,12 @@ class TranslationsFrameContainer:
                 # Add simplified word to map with its y-pos
                 # We use only the first entry's y-pos for simplicity
                 if entry.simplified not in self.all_simplified_words_to_pos_map:
-                    self.all_simplified_words_to_pos_map[entry.simplified] = current_y_offset
+                    self.all_simplified_words_to_pos_map[entry.simplified] = current_y_offset + entry_y_offset
+
+                entry_y_offset += translation_frame.winfo_height()
                 
             self.scrollable_frame.update_idletasks()
-            current_y_offset = self.scrollable_frame.winfo_height() + len(entries) * 20
-            print(current_y_offset, self.scrollable_frame.winfo_height())
-        
-        print (self.all_simplified_words_to_pos_map)
+            current_y_offset = self.scrollable_frame.winfo_height() + len(entries) * 12
 
         # Adjust positions to proportional of height
         final_scrollable_height = self.scrollable_frame.winfo_height()
@@ -188,7 +198,15 @@ class TranslationsFrameContainer:
         side_frame_line = tk.Frame(self.side_frame)
 
         # Function for scrolling to a specific word at its y-pos
-        scroll_to_word = lambda word: lambda: self.__scroll_to_y_pos(self.all_simplified_words_to_pos_map[word])
+        def scroll_to_word(word):
+            def internal_func():
+                if self.current_selected_simplified_label:
+                    self.current_selected_simplified_label.config(bg="white")
+
+                self.current_selected_simplified_label = self.simplified_label_map[word]
+                self.simplified_label_map[word].config(bg="yellow")
+                self.__scroll_to_y_pos(self.all_simplified_words_to_pos_map[word])
+            return internal_func
 
         for word in self.all_simplified_words_to_pos_map.keys():
             side_frame_line.update_idletasks()
@@ -208,7 +226,6 @@ class TranslationsFrameContainer:
             simplified_button.pack(side=tk.LEFT, padx=1, pady=1)
 
     def __scroll_to_y_pos(self, y_pos):
-        print(y_pos, self.scrollable_frame.winfo_height(), self.canvas.winfo_y(), self.canvas.winfo_height())
         self.canvas.yview_moveto(y_pos)
 
     def __bind_to_mousewheel(self, event):
