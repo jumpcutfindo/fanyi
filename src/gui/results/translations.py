@@ -66,6 +66,13 @@ class TranslationsFrameContainer:
         self.all_simplified_words_to_pos_map = {}
 
 
+    def __set_translations_visible(self, is_visible):
+        if is_visible:
+            self.frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        else:
+            self.frame.pack_forget()
+
+
     def __handle_resize(self, event):
         canvas = event.widget
         canvas.itemconfigure("canvas_frame", width=event.width)
@@ -87,6 +94,8 @@ class TranslationsFrameContainer:
                     wraplength=self.scrollable_frame.winfo_width() - 32)
 
     def set_translations(self, translations):
+        self.__set_translations_visible(False)
+
         # Reset canvas scroll
         self.canvas.yview_moveto(0)
 
@@ -231,6 +240,8 @@ class TranslationsFrameContainer:
         # Handle final side_frame_line
         if side_frame_line.winfo_reqwidth() > 0:
             side_frame_line.pack(side=tk.TOP, anchor=tk.NW, pady=2)
+
+        self.__set_translations_visible(True)
 
     def __scroll_to_y_pos(self, y_pos):
         self.canvas.yview_moveto(y_pos)
