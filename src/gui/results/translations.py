@@ -183,19 +183,18 @@ class TranslationsFrameContainer:
                 if entry.simplified not in self.label_map:
                     self.label_map[entry.simplified] = (simplified_label, traditional_label, pinyin_label, definitions_label)
 
-                translation_frame.update_idletasks()
-                entry_y_offset = translation_frame.winfo_height()
-
                 # Add simplified word to map with its y-pos
                 # We use only the first entry's y-pos for simplicity
                 if entry.simplified not in self.all_simplified_words_to_pos_map:
                     self.all_simplified_words_to_pos_map[entry.simplified] = current_y_offset + entry_y_offset
+
+                entry_y_offset += definitions_label.winfo_reqheight()
                 
             self.scrollable_frame.update_idletasks()
-            current_y_offset = self.scrollable_frame.winfo_height() + len(entries) * 20
+            current_y_offset = self.scrollable_frame.winfo_reqheight()
 
         # Adjust positions to proportional of height
-        final_scrollable_height = self.scrollable_frame.winfo_height()
+        final_scrollable_height = self.scrollable_frame.winfo_reqheight()
         for key in self.all_simplified_words_to_pos_map.keys():
             self.all_simplified_words_to_pos_map[key] = float(self.all_simplified_words_to_pos_map[key]) / float(final_scrollable_height)
 
