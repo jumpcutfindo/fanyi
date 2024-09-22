@@ -227,6 +227,10 @@ class TranslationsFrameContainer:
                 simplified_button = tk.Button(side_frame_line, text=word, font=('Microsoft Yahei', 10), command=scroll_to_word(word))
 
             simplified_button.pack(side=tk.LEFT, padx=1, pady=1)
+        
+        # Handle final side_frame_line
+        if side_frame_line.winfo_reqwidth() > 0:
+            side_frame_line.pack(side=tk.TOP, anchor=tk.NW, pady=2)
 
     def __scroll_to_y_pos(self, y_pos):
         self.canvas.yview_moveto(y_pos)
