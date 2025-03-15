@@ -1,5 +1,6 @@
-from threading import Thread
+from datetime import datetime
 import smokesignal
+from PIL import ImageGrab
 from typing import Callable
 from loguru import logger
 
@@ -44,6 +45,8 @@ class Controller:
             'capture_with_previous_preset', '<ctrl>+<alt>+g', lambda: self.on_capture_with_previous_preset())
         self.__register_hotkey(
             'show_monitor_info', '<ctrl>+<alt>+m', lambda: self.on_show_monitor_info())
+        self.__register_hotkey(
+            'paste_from_clipboard', '<ctrl>+v', lambda: self.on_paste_from_clipboard())
 
         logger.info("Registered {} hotkeys".format(len(self.hotkeys)))
 
@@ -170,7 +173,18 @@ class Controller:
             logger.error('Unable to capture with previous preset')
         else:
             smokesignal.emit('screenshot_and_update', preset=self.previous_preset)
-                
+
+    def on_paste_from_clipboard(self):
+        image = ImageGrab.grabclipboard()
+
+        if image:
+            image_name = f'clipboard-{datetime.now().strftime("%Y-%m-%dT%H-%M-%S")}'
+            full_path = f'{self.file_manager.get_screenshots_directory()}\\{image_name}.png'
+            image.save(full_path)
+
+            smokesignal.emit('process_and_update', screenshot=full_path)
+        else:
+            logger.error('Unable to paste from clipboard, ensure it is an image')
 
     def on_show_monitor_info(self):
         logger.info('Showing monitor info: {}'.format(
